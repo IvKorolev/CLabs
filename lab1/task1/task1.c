@@ -242,7 +242,19 @@ int main (int argc, char* argv[]) {
             printf("%lld \n", result4);
             break;
         case 'f':
-            
+            unsigned long long int result5 = 1;
+            enum errors f = fact(number, &result5);
+            if (f == INVALID_INPUT){
+                printf("Ошибка ввода\n");
+                return INVALID_INPUT;
+            }
+            if (f == INVALID_MEMORY){
+                printf("Ошибка памяти\n");
+                return INVALID_MEMORY;
+            }
+            printf("%llu\n", result5);
+            break;
+
         default:
             printf("Ошибка: такого флага нет в доступных флагах: %s\n", argv[1]);
             break;
