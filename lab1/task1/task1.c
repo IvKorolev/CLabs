@@ -123,6 +123,7 @@ enum errors st_table(long int x, long int*** result){
             (*result)[base][degree] = (long int) pow(base, degree);
         }
     }
+    return OK;
 }
 
 enum errors nat_sum(long int x, long long int *result){
@@ -206,6 +207,44 @@ int main (int argc, char* argv[]) {
             }
             printf("\n");
             if (result2 != NULL) free(result2);
+            break;
+        case 'e':
+            long int** result3 = NULL;
+            enum errors e = st_table(number, &result3);
+            if (e == INVALID_INPUT || number < 0){
+                printf("Ошибка ввода, число должно быть не больше 10\n");
+                return INVALID_INPUT;
+            }
+            if (e == INVALID_MEMORY){
+                printf("Ошибка памяти\n");
+                //if (result3 != NULL) free(result3);
+                return INVALID_MEMORY;
+            }
+            for (int i = 1; i < 11; i++){
+                printf("Основание %d: ", i);
+                for (int j = 0; j < number; j++){
+                    printf("%ld ", result3[i][j]);
+                }
+                printf("\n");
+            }
+            for(int i = 0; i <= 10; i++){
+                if(result3[i] != NULL) free(result3[i]);
+            }
+            if(result3 != NULL) free(result3);
+            break;
+        case 'a':
+            long long int result4 = 0;
+            enum errors a = nat_sum(number, &result4);
+            if (a == INVALID_MEMORY){
+                printf("Ошибка памяти\n");
+                return INVALID_MEMORY;
+            }
+            printf("%lld \n", result4);
+            break;
+        case 'f':
+            
+        default:
+            printf("Ошибка: такого флага нет в доступных флагах: %s\n", argv[1]);
             break;
     }
     return 0;
