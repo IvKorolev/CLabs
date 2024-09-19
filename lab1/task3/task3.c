@@ -11,6 +11,7 @@
 enum errors{
     INVALID_INPUT,
     INVALID_MEMORY,
+    ERROR_OVERFLOW,
     OK,
 };
 
@@ -44,6 +45,13 @@ enum errors str_to_int(const char *x, long int *res, int base){
     }
 
     return OK;
+}
+
+int check_overflow_double(const ld* num1, const ld* num2, ld epsilon)
+{
+    epsilon *= 1;
+    long double result = *num1 * *num2;
+    return (result - DBL_MAX <= epsilon && result + DBL_MAX >= epsilon);
 }
 
 int compare_with_epsilon(ld a, ld b, ld epsilon) {
@@ -95,6 +103,12 @@ enum errors triangle(ld a, ld b, ld c, ld epsilon) {
     if (a < 0 || b < 0 || c < 0) {
         return INVALID_INPUT;
     }
+
+    if(!check_overflow_double(&a, &a, epsilon) ||
+        !check_overflow_double(&b, &b, epsilon) ||
+        !check_overflow_double(&c, &c, epsilon))
+        return ERROR_OVERFLOW;
+
     ld max_side = fmaxl(fmaxl(a, b), c);
     ld other1, other2;
 
@@ -173,7 +187,14 @@ int main(int argc, char* argv[]){
                 printf("Ошибка: одно из чисел невалидно\n");
                 return INVALID_INPUT;
             }
-            triangle(first, second, third, eps);
+            enum errors result = triangle(first, second, third, eps);
+            if (result == INVALID_INPUT){
+                printf("Ошибка ввода сторон\n");
+                return INVALID_INPUT;
+            } else if (result == ERROR_OVERFLOW){
+                printf("Ошибка: переполнение памяти\n");
+            }
+
             break;
 
         default:
