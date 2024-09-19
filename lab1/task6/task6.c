@@ -14,10 +14,10 @@ enum errors{
     OK,
 };
 
-enum errors str_to_long_double(const char *x, ld *res){
+enum errors str_to_double(const char *x, double *res){
     char *last;
-    *res = strtold(x, &last);
-    if (errno == ERANGE && (*res == LDBL_MIN || *res == LDBL_MAX)){
+    *res = strtod(x, &last);
+    if (errno == ERANGE && (*res == DBL_MIN || *res == DBL_MAX)){
         return INVALID_INPUT;
     }
     if (errno != 0 && *res == 0){
@@ -46,7 +46,7 @@ double f_d(double x) {
     return pow(x, x);
 }
 
-double trapezoidal(double (*f)(double), double a, double b, ld epsilon) {
+double trapezoidal(double (*f)(double), double a, double b, double epsilon) {
     double previous_result, current_result = 0;
     int n = 1;
     double h, x;
@@ -73,16 +73,16 @@ int main(int argc, char *argv[]) {
         printf("Ошибка: неправильный ввод\n");
         return INVALID_INPUT;
     }
-    ld epsilon;
-    if(str_to_long_double(argv[1], &epsilon) == INVALID_INPUT) {
+    double epsilon;
+    if(str_to_double(argv[1], &epsilon) == INVALID_INPUT) {
         printf("Ошибка ввода\n");
         return INVALID_INPUT;
-    };
+    }
     double a = 0.0, b = 1.0;
 
     double result_a = trapezoidal(f_a, a, b, epsilon);
     double result_b = trapezoidal(f_b, a, b, epsilon);
-    double result_c = trapezoidal(f_c, a, b, epsilon);
+    double result_c = trapezoidal(f_c, a, (b - epsilon), epsilon);
     double result_d = trapezoidal(f_d, a, b, epsilon);
 
     printf("Интеграл A: %lf\n", result_a);
