@@ -73,6 +73,9 @@ int is_prime(long int x){
 }
 
 enum errors divide_to_nums(long int x, char** result, int* size){
+    if (x < 0){
+        return INVALID_INPUT;
+    }
     int capacity = 4;
     *result = (char*)malloc(capacity * sizeof(char));
     if (*result == NULL) return INVALID_MEMORY;
@@ -197,6 +200,10 @@ int main (int argc, char* argv[]) {
             char* result2 = NULL;
             int size2 = 0;
             enum errors s = divide_to_nums(number, &result2, &size2);
+            if (s == INVALID_INPUT){
+                printf("Число должно быть больше 0\n");
+                return INVALID_INPUT;
+            }
             if (s == INVALID_MEMORY){
                 printf("Ошибка памяти\n");
                 if(result2 != NULL) free(result2);
