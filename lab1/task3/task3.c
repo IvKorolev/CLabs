@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include <errno.h>
 #include <limits.h>
 #include <float.h>
 
@@ -15,32 +14,26 @@ enum errors{
     OK,
 };
 
-enum errors str_to_long_double(const char *x, ld *res){
-    char *last;
-    *res = strtold(x, &last);
-    if (errno == ERANGE && (*res == LDBL_MIN || *res == LDBL_MAX)){
+enum errors str_to_long_double(const char *x, ld *res) {
+    char symbol;
+    if (sscanf(x, "%Lf%c", res, &symbol) != 1) {
         return INVALID_INPUT;
     }
-    if (errno != 0 && *res == 0){
+
+    if (*res >= LDBL_MAX || *res <= LDBL_MIN) {
         return INVALID_INPUT;
     }
-    if (*last != '\0'){
-        return INVALID_INPUT;
-    }
+
     return OK;
 }
 
-enum errors str_to_int(const char *x, long int *res, int base){
-    char *last;
-    *res = strtol(x, &last, base);
+enum errors str_to_int(const char *x, long int *res) {
+    char symbol;
+    if (sscanf(x, "%ld%c", res, &symbol) != 1) {
+        return INVALID_INPUT;
+    }
 
-    if (errno == ERANGE && (*res == LONG_MIN || *res == LONG_MAX)){
-        return INVALID_INPUT;
-    }
-    if (errno != 0 && *res == 0){
-        return INVALID_INPUT;
-    }
-    if (*last != '\0'){
+    if (*res >= INT_MAX || *res <= INT_MIN) {
         return INVALID_INPUT;
     }
 
@@ -157,8 +150,8 @@ int main(int argc, char* argv[]){
             }
             long int number1, number2, base = 10;
 
-            if (str_to_int(argv[2], &number1, base) != OK ||
-                str_to_int(argv[3], &number2, base) != OK || number1 == 0 || number2 == 0)
+            if (str_to_int(argv[2], &number1) != OK ||
+                str_to_int(argv[3], &number2) != OK || number1 == 0 || number2 == 0)
             {
                 printf("Ошибка: одно из чисел невалидно или равно 0\n");
                 return INVALID_INPUT;

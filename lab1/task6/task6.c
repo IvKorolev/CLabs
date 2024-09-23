@@ -2,35 +2,32 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include <errno.h>
 #include <limits.h>
 #include <float.h>
 
 #define ld long double
 
-enum errors{
+enum errors {
     INVALID_MEMORY,
     INVALID_INPUT,
     OK,
 };
 
-enum errors str_to_double(const char *x, double *res){
-    char *last;
-    *res = strtod(x, &last);
-    if (errno == ERANGE && (*res == DBL_MIN || *res == DBL_MAX)){
+enum errors str_to_double(const char *x, double *res) {
+    char symbol;
+    if (sscanf(x, "%lf%c", res, &symbol) != 1) {
         return INVALID_INPUT;
     }
-    if (errno != 0 && *res == 0){
+
+    if (*res >= DBL_MAX || *res <= DBL_MIN) {
         return INVALID_INPUT;
     }
-    if (*last != '\0'){
-        return INVALID_INPUT;
-    }
+
     return OK;
 }
 
 double f_a(double x) {
-    if (x == 0) return 0;  // Избегаем деления на 0
+    if (x == 0) return 0;
     return log(1 + x) / x;
 }
 
@@ -74,7 +71,7 @@ int main(int argc, char *argv[]) {
         return INVALID_INPUT;
     }
     double epsilon;
-    if(str_to_double(argv[1], &epsilon) == INVALID_INPUT) {
+    if (str_to_double(argv[1], &epsilon) == INVALID_INPUT) {
         printf("Ошибка ввода\n");
         return INVALID_INPUT;
     }

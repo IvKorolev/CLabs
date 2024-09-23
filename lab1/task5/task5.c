@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include <errno.h>
 #include <limits.h>
 #include <float.h>
 
@@ -15,18 +14,16 @@ enum errors{
     OK,
 };
 
-enum errors str_to_long_double(const char *x, ld *res){
-    char *last;
-    *res = strtold(x, &last);
-    if (errno == ERANGE && (*res == LDBL_MIN || *res == LDBL_MAX)){
+enum errors str_to_long_double(const char *x, ld *res) {
+    char symbol;
+    if (sscanf(x, "%Lf%c", res, &symbol) != 1) {
         return INVALID_INPUT;
     }
-    if (errno != 0 && *res == 0){
+
+    if (*res >= LDBL_MAX || *res <= LDBL_MIN) {
         return INVALID_INPUT;
     }
-    if (*last != '\0'){
-        return INVALID_INPUT;
-    }
+
     return OK;
 }
 

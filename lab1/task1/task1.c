@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include <errno.h>
 #include <limits.h>
 
 enum errors{
@@ -11,17 +10,13 @@ enum errors{
     OK,
 };
 
-enum errors str_to_int(const char *x, long int *res, int base){
-    char *last;
-    *res = strtol(x, &last, base);
+enum errors str_to_int(const char *x, long int *res) {
+    char symbol;
+    if (sscanf(x, "%ld%c", res, &symbol) != 1) {
+        return INVALID_INPUT;
+    }
 
-    if (errno == ERANGE && (*res == LONG_MIN || *res == LONG_MAX)){
-        return INVALID_INPUT;
-    }
-    if (errno != 0 && *res == 0){
-        return INVALID_INPUT;
-    }
-    if (*last != '\0'){
+    if (*res >= INT_MAX || *res <= INT_MIN) {
         return INVALID_INPUT;
     }
 
@@ -157,7 +152,7 @@ enum errors fact(long int x, unsigned long long int *result){
 int main (int argc, char* argv[]) {
     if (argc != 3) return INVALID_INPUT;
     long int number = 0;
-    if(str_to_int(argv[2], &number, 10) != OK)
+    if(str_to_int(argv[2], &number) != OK)
     {
         printf("Ошибка: невалидное число\n");
         return INVALID_INPUT;
