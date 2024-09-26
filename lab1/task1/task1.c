@@ -151,7 +151,14 @@ enum errors fact(long int x, unsigned long long int *result){
 
 int main (int argc, char* argv[]) {
     if (argc != 3) return INVALID_INPUT;
+
+    if (!((argv[1][0] == '/' || argv[1][0] == '-') && (argv[1][2] == '\0'))){
+        printf("Ошибка ввода флага\n");
+        return INVALID_INPUT;
+    }
+
     long int number = 0;
+
     if(str_to_int(argv[2], &number) != OK)
     {
         printf("Ошибка: невалидное число\n");

@@ -125,6 +125,12 @@ enum errors triangle(ld a, ld b, ld c, ld epsilon) {
 }
 
 int main(int argc, char* argv[]){
+
+    if (!((argv[1][0] == '/' || argv[1][0] == '-') && (argv[1][2] == '\0'))){
+        printf("Ошибка ввода флага\n");
+        return INVALID_INPUT;
+    }
+
     switch(argv[1][1]){
         case 'q':
             if (argc != 6) {
@@ -148,7 +154,7 @@ int main(int argc, char* argv[]){
                 printf("Ошибка: недостаточно аргументов.\n");
                 return INVALID_INPUT;
             }
-            long int number1, number2, base = 10;
+            long int number1, number2;
 
             if (str_to_int(argv[2], &number1) != OK ||
                 str_to_int(argv[3], &number2) != OK || number1 == 0 || number2 == 0)

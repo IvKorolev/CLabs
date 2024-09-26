@@ -67,6 +67,11 @@ int main(int argc, char* argv[]) {
         return INVALID_INPUT;
     }
 
+    if (!((argv[1][0] == '/' || argv[1][0] == '-') && (argv[1][2] == '\0' || argv[1][3] == '\0'))){
+        printf("Ошибка ввода флага\n");
+        return INVALID_INPUT;
+    }
+
     FILE* input = fopen(argv[2], "r");
     if (input == NULL){
         printf("Ошибка чтения первого файла\n");
