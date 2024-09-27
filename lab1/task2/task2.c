@@ -194,7 +194,6 @@ double fifth_lim_gamma(double epsilon){
 }
 
 double fifth_row_gamma(double epsilon){
-    double sum = -M_PI * M_PI / 6.0;
     int k = 2;
     double current = 0.0, previous = 0.0;
     double l = 0;
@@ -252,50 +251,23 @@ int main(int argc, char* argv[]){
         printf("Ошибка ввода epsilon\n");
         return INVALID_INPUT;
     }
-
-    double results[15];
-    results[0] = first_lim_e(epsilon);
-    results[1] = second_lim_pi(epsilon);
-    results[2] = third_limit_ln(epsilon);
-    results[3] = fourth_lim_sqrt(epsilon);
-    results[4] = fifth_lim_gamma(epsilon);
-
-    results[5] = first_row_e(epsilon);
-    results[6] = second_row_pi(epsilon);
-    results[7] = third_row_ln(epsilon);
-    results[8] = fourth_row_sqrt(epsilon);
-    results[9] = fifth_row_gamma(epsilon);
-
-    results[10] = first_equation_e(epsilon);
-    results[11] = second_equation_pi(epsilon);
-    results[12] = third_equation_ln(epsilon);
-    results[13] = fourth_equation_sqrt(epsilon);
-    results[14] = fifth_equation_gamma(epsilon);
-
-    char* constants[5] = {"e", "pi", "ln2", "sqrt2", "gamma"};
-    char* ways[3] = {"LIMITS", "ROWS","EQUATIONS"};
-
-    int precision = 0;
-    double temp = epsilon;
-    while (temp != 1)
-    {
-        temp *= 10;
-        ++precision;
-    }
-    for(int i = 0; i < 15; i++){
-        if (i%5 == 0){
-            printf("\n %6c%s", ' ', ways[i/5]);
-        }
-        printf("\nresult for %s:", constants[i%5]);
-        if (results[i] != INFINITY && !isnan(results[i])){
-            printf(" %.*f", precision, results[i]);
-        }
-        else{
-            printf(" couldn't calculate constant with given accuracy");
-        }
-    }
-
-    printf("\n");
-
+    printf("--------Limit---------\n");
+    printf("e:   %.15f\n", first_lim_e(epsilon));
+    printf("π:   %.15f\n", second_lim_pi(epsilon));
+    printf("ln2: %.15f\n", third_limit_ln(epsilon));
+    printf("√2:  %.15f\n", fourth_lim_sqrt(epsilon));
+    printf("Ɣ:   %.15f\n", fifth_lim_gamma(epsilon));
+    printf("---------Rows---------\n");
+    printf("e:   %.15f\n", first_row_e(epsilon));
+    printf("π:   %.15f\n", second_row_pi(epsilon));
+    printf("ln2: %.15f\n", third_row_ln(epsilon));
+    printf("√2:  %.15f\n", fourth_row_sqrt(epsilon));
+    printf("Ɣ:   %.15f\n", fifth_row_gamma(epsilon));
+    printf("-------Equation-------\n");
+    printf("e:   %.15f\n", first_equation_e(epsilon));
+    printf("π:   %.15f\n", second_equation_pi(epsilon));
+    printf("ln2: %.15f\n", third_equation_ln(epsilon));
+    printf("√2:  %.15f\n", fourth_equation_sqrt(epsilon));
+    printf("Ɣ:   %.15f\n", fifth_equation_gamma(epsilon));
     return 0;
 }
