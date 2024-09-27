@@ -26,6 +26,7 @@ enum errors str_to_double(const char *x, double *res){
 
     return OK;
 }
+
 double first_lim_e(double epsilon){
     int n = 1;
     double current = 0.0;
@@ -33,7 +34,7 @@ double first_lim_e(double epsilon){
     do{
         previous = current;
         current = pow((1.0 + 1.0 / n), n);
-        n *= 2;
+        n += 1;
     }while(fabs(previous - current) > epsilon);
     return current;
 }
@@ -172,37 +173,25 @@ double fourth_equation_sqrt(double epsilon){
     return x;
 }
 
-double C(int m, int k){
-    if (k > m || m < 0) return 0.0;
-    double chisl = factorial(m);
-    double znam = factorial(k) * factorial(m - k);
-    return chisl / znam;
-}
-
-double sum(int n)
-{
+double sum(int n){
     double sum = 1;
     for (int i = 2; i <= n; i++)
     {
         sum += 1.0/i;
     }
-
     return sum;
-
 }
 
 double fifth_lim_gamma(double epsilon){
     double previous = 0;
     double current = 1;
     int n = 1;
-    do
-    {
+    do{
         previous = current;
         n *= 2;
         current = sum(n) - log(n);
 
-    } while (fabs(previous - current) >= epsilon);
-
+    }while (fabs(previous - current) >= epsilon);
     return current;
 }
 
