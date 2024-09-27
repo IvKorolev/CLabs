@@ -179,17 +179,30 @@ double C(int m, int k){
     return chisl / znam;
 }
 
+double sum(int n)
+{
+    double sum = 1;
+    for (int i = 2; i <= n; i++)
+    {
+        sum += 1.0/i;
+    }
+
+    return sum;
+
+}
+
 double fifth_lim_gamma(double epsilon){
-    int m = 1;
-    double current = 0.0, previous = 0.0;
-    do{
+    double previous = 0;
+    double current = 1;
+    int n = 1;
+    do
+    {
         previous = current;
-        current = 0.0;
-        for (int k = 1; k <= m; k++){
-            current += C(m, k) * (pow(-1, k) / k) * log(factorial(k));
-        }
-        m += 1;
-    }while(fabs(current - previous) > epsilon);
+        n *= 2;
+        current = sum(n) - log(n);
+
+    } while (fabs(previous - current) >= epsilon);
+
     return current;
 }
 
@@ -202,8 +215,7 @@ double fifth_row_gamma(double epsilon){
         l = sqrt(k);
         if (fmod(l,1.0) == 0)
         {
-            k +=
-                    1;
+            k += 1;
             l = (int)pow(k, 1.0/2.0);
         }
         current += (1.0 / pow((int)l, 2.0)) - (1.0 / k);
@@ -228,14 +240,14 @@ double fifth_equation_gamma(double epsilon) {
     int p = 2;
     double current = log(2) * 0.5;
     double previous = 0;
-    double proizved = 1.0;
+    double proizved = 0.5;
     do {
         previous = current;
         do{
             p++;
         }while (!is_prime(p));
         proizved *= (p - 1.0) / p;
-        current = log(p) + proizved;
+        current = log(p) * proizved;
     }while (fabs(previous - current) >= epsilon);
     return -log(current);
 }
