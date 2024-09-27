@@ -3,7 +3,7 @@
 #include <string.h>
 #include <ctype.h>
 
-enum errors {
+enum errors{
     INVALID_INPUT,
     INVALID_MEMORY,
     OK,
@@ -33,7 +33,7 @@ enum errors count_letters(FILE* input, FILE* output){
     return OK;
 }
 
-enum errors count_special_symbols(FILE* input, FILE* output) {
+enum errors count_special_symbols(FILE* input, FILE* output){
     char buffer[1024];
     while (fgets(buffer, sizeof(buffer), input)){
         int count = 0;
@@ -60,7 +60,7 @@ enum errors replace_ascii(FILE* input, FILE* output){
     return OK;
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[]){
 
     if (argc < 3){
         printf("Неправильное количество аргументов\n");

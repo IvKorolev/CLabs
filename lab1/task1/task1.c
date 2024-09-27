@@ -16,7 +16,7 @@ enum errors str_to_int(const char *x, long int *res) {
         return INVALID_INPUT;
     }
 
-    if (*res >= INT_MAX || *res <= INT_MIN) {
+    if (abs(*res) >= INT_MAX || abs(*res) <= INT_MIN) {
         return INVALID_INPUT;
     }
 

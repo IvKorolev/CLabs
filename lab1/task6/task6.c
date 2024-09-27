@@ -7,71 +7,75 @@
 
 #define ld long double
 
-enum errors {
+enum errors{
     INVALID_MEMORY,
     INVALID_INPUT,
     OK,
 };
 
-enum errors str_to_double(const char *x, double *res) {
+enum errors str_to_double(const char *x, double *res){
     char symbol;
-    if (sscanf(x, "%lf%c", res, &symbol) != 1) {
+    if (sscanf(x, "%lf%c", res, &symbol) != 1){
         return INVALID_INPUT;
     }
 
-    if (*res >= DBL_MAX || *res <= DBL_MIN) {
+    if (fabs(*res) >= DBL_MAX || fabs(*res) <= DBL_MIN){
         return INVALID_INPUT;
     }
 
     return OK;
 }
 
-double f_a(double x) {
+double f_a(double x){
     if (x == 0) return 0;
     return log(1 + x) / x;
 }
 
-double f_b(double x) {
+double f_b(double x){
     return exp(-x * x / 2);
 }
 
-double f_c(double x) {
+double f_c(double x){
     return log(1 / (1 - x));
 }
 
-double f_d(double x) {
+double f_d(double x){
     return pow(x, x);
 }
 
-double trapezoidal(double (*f)(double), double a, double b, double epsilon) {
+double trapezoidal(double (*f)(double), double a, double b, double epsilon){
     double previous_result, current_result = 0;
     int n = 1;
     double h, x;
 
-    do {
+    do{
         previous_result = current_result;
         current_result = 0;
         h = (b - a) / n;
 
-        for (int i = 1; i < n; i++) {
+        for (int i = 1; i < n; i++){
             x = a + i * h;
             current_result += f(x);
         }
 
         current_result = (current_result * 2 + f(a) + f(b)) * h / 2;
         n *= 2;
-    } while (fabs(current_result - previous_result) > epsilon);
+    }while (fabs(current_result - previous_result) > epsilon);
 
     return current_result;
 }
 
-int main(int argc, char *argv[]) {
-    if (argc != 2) {
+int main(int argc, char *argv[]){
+    if (argc != 2){
         printf("Ошибка: неправильный ввод\n");
         return INVALID_INPUT;
     }
     double epsilon;
-    if (str_to_double(argv[1], &epsilon) == INVALID_INPUT) {
+    if (str_to_double(argv[1], &epsilon) == INVALID_INPUT){
+        printf("Ошибка ввода\n");
+        return INVALID_INPUT;
+    }
+    if(epsilon < 0){
         printf("Ошибка ввода\n");
         return INVALID_INPUT;
     }

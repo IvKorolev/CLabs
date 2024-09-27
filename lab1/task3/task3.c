@@ -14,57 +14,58 @@ enum errors{
     OK,
 };
 
-enum errors str_to_long_double(const char *x, ld *res) {
+enum errors str_to_long_double(const char *x, ld *res){
     char symbol;
-    if (sscanf(x, "%Lf%c", res, &symbol) != 1) {
+    if (sscanf(x, "%Lf%c", res, &symbol) != 1){
         return INVALID_INPUT;
     }
 
-    if (*res >= LDBL_MAX || *res <= LDBL_MIN) {
+    if (fabsl(*res) >= LDBL_MAX || fabsl(*res) <= LDBL_MIN){
         return INVALID_INPUT;
     }
 
     return OK;
 }
 
-enum errors str_to_int(const char *x, long int *res) {
+enum errors str_to_int(const char *x, long int *res){
     char symbol;
-    if (sscanf(x, "%ld%c", res, &symbol) != 1) {
+    if (sscanf(x, "%ld%c", res, &symbol) != 1){
         return INVALID_INPUT;
     }
 
-    if (*res >= INT_MAX || *res <= INT_MIN) {
+    if (abs(*res) >= INT_MAX || abs(*res) <= INT_MIN){
         return INVALID_INPUT;
     }
 
     return OK;
 }
 
-int check_overflow_double(const ld* num1, const ld* num2, ld epsilon)
-{
+int check_overflow_double(const ld* num1, const ld* num2, ld epsilon){
     epsilon *= 1;
     long double result = *num1 * *num2;
     return (result - DBL_MAX <= epsilon && result + DBL_MAX >= epsilon);
 }
 
-int compare_with_epsilon(ld a, ld b, ld epsilon) {
+int compare_with_epsilon(ld a, ld b, ld epsilon){
     return fabsl(a - b) < epsilon;
 }
 
 enum errors first(ld a, ld b, ld c, const ld epsilon){
     ld discriminant = b * b - 4 * a * c;
 
-    if (compare_with_epsilon(a, 0.0L, epsilon)) {
+    if (compare_with_epsilon(a, 0.0L, epsilon)){
         printf("Это не квадратное уравнение\n");
         return INVALID_INPUT;
     }
 
-    if (discriminant < -epsilon) {
+    if (discriminant < -epsilon){
         printf("Для коэффициентов %Lf, %Lf, %Lf Корней нет (дискриминант меньше нуля)\n", a, b, c);
-    } else if (compare_with_epsilon(discriminant, 0.0L, epsilon)) {
+    }
+    else if (compare_with_epsilon(discriminant, 0.0L, epsilon)){
         ld x = -b / (2 * a);
         printf("Для коэффициентов %Lf, %Lf, %Lf Один корень: x = %Lf\n", a, b, c, x);
-    } else {
+    }
+    else{
         ld sqrt_discriminant = sqrtl(discriminant);
         ld x1 = (-b + sqrt_discriminant) / (2 * a);
         ld x2 = (-b - sqrt_discriminant) / (2 * a);
@@ -73,27 +74,27 @@ enum errors first(ld a, ld b, ld c, const ld epsilon){
     return OK;
 }
 
-void permutations(ld a, ld b, ld c, const ld epsilon) {
+void permutations(ld a, ld b, ld c, const ld epsilon){
     first(a, b, c, epsilon);
-    if (!compare_with_epsilon(b, c, epsilon)) {
+    if (!compare_with_epsilon(b, c, epsilon)){
         first(a, c, b, epsilon);
     }
-    if (!compare_with_epsilon(a, b, epsilon)) {
+    if (!compare_with_epsilon(a, b, epsilon)){
         first(b, a, c, epsilon);
     }
-    if (!compare_with_epsilon(a, c, epsilon) && !compare_with_epsilon(b, c, epsilon)) {
+    if (!compare_with_epsilon(a, c, epsilon) && !compare_with_epsilon(b, c, epsilon)){
         first(b, c, a, epsilon);
     }
-    if (!compare_with_epsilon(a, c, epsilon)) {
+    if (!compare_with_epsilon(a, c, epsilon)){
         first(c, a, b, epsilon);
     }
-    if (!compare_with_epsilon(a, b, epsilon) && !compare_with_epsilon(a, c, epsilon)) {
+    if (!compare_with_epsilon(a, b, epsilon) && !compare_with_epsilon(a, c, epsilon)){
         first(c, b, a, epsilon);
     }
 }
 
-enum errors triangle(ld a, ld b, ld c, ld epsilon) {
-    if (a < 0 || b < 0 || c < 0) {
+enum errors triangle(ld a, ld b, ld c, ld epsilon){
+    if (a < 0 || b < 0 || c < 0){
         return INVALID_INPUT;
     }
 
@@ -105,20 +106,23 @@ enum errors triangle(ld a, ld b, ld c, ld epsilon) {
     ld max_side = fmaxl(fmaxl(a, b), c);
     ld other1, other2;
 
-    if (compare_with_epsilon(max_side, a, epsilon)) {
+    if (compare_with_epsilon(max_side, a, epsilon)){
         other1 = b;
         other2 = c;
-    } else if (compare_with_epsilon(max_side, b, epsilon)) {
+    }
+    else if (compare_with_epsilon(max_side, b, epsilon)){
         other1 = a;
         other2 = c;
-    } else {
+    }
+    else{
         other1 = a;
         other2 = b;
     }
 
-    if (compare_with_epsilon(max_side * max_side, other1 * other1 + other2 * other2, epsilon)) {
+    if (compare_with_epsilon(max_side * max_side, other1 * other1 + other2 * other2, epsilon)){
         printf("Числа %Lf, %Lf и %Lf могут быть сторонами прямоугольного треугольника\n", a, b, c);
-    } else {
+    }
+    else{
         printf("Числа %Lf, %Lf и %Lf не могут быть сторонами прямоугольного треугольника\n", a, b, c);
     }
     return OK;
@@ -133,7 +137,7 @@ int main(int argc, char* argv[]){
 
     switch(argv[1][1]){
         case 'q':
-            if (argc != 6) {
+            if (argc != 6){
                 printf("Ошибка: недостаточно аргументов.\n");
                 return INVALID_INPUT;
             }
@@ -150,7 +154,7 @@ int main(int argc, char* argv[]){
             break;
 
         case 'm':
-            if (argc != 4) {
+            if (argc != 4){
                 printf("Ошибка: недостаточно аргументов.\n");
                 return INVALID_INPUT;
             }
@@ -162,18 +166,16 @@ int main(int argc, char* argv[]){
                 printf("Ошибка: одно из чисел невалидно или равно 0\n");
                 return INVALID_INPUT;
             }
-            if(number1 % number2 == 0)
-            {
+            if(number1 % number2 == 0){
                 printf("Число %ld делится на %ld без остатка\n", number1, number2);
             }
-            else
-            {
+            else{
                 printf("Число %ld не делится на %ld без остатка\n", number1, number2);
             }
             break;
 
         case 't':
-            if (argc != 6) {
+            if (argc != 6){
                 printf("Ошибка: недостаточно аргументов.\n");
                 return INVALID_INPUT;
             }
@@ -190,7 +192,8 @@ int main(int argc, char* argv[]){
             if (result == INVALID_INPUT){
                 printf("Ошибка ввода сторон\n");
                 return INVALID_INPUT;
-            } else if (result == ERROR_OVERFLOW){
+            }
+            else if (result == ERROR_OVERFLOW){
                 printf("Ошибка: переполнение памяти\n");
             }
 

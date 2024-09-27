@@ -14,13 +14,13 @@ enum errors{
     OK,
 };
 
-enum errors str_to_double(const char *x, double *res) {
+enum errors str_to_double(const char *x, double *res){
     char symbol;
-    if (sscanf(x, "%lf%c", res, &symbol) != 1) {
+    if (sscanf(x, "%lf%c", res, &symbol) != 1){
         return INVALID_INPUT;
     }
 
-    if (*res >= DBL_MAX || *res <= DBL_MIN) {
+    if (fabs(*res) >= DBL_MAX || fabs(*res) <= DBL_MIN){
         return INVALID_INPUT;
     }
 
@@ -42,15 +42,15 @@ double factorial(int n){
     if (n == 0 || n == 1) return 1.0;
     double result = 1.0;
     if (n > 20) n = 20;
-    for (int i = 2; i < n; i++){
+    for (int i = 2; i <= n; i++){
         result *= i;
     }
     return result;
 }
 
 double first_row_e(double epsilon){
-    int n = 0;
-    double current = 0.0;
+    int n = 1;
+    double current = 1.0;
     double temp;
     do{
         temp = 1.0 / (factorial(n));
@@ -156,6 +156,7 @@ double fourth_row_sqrt(double epsilon){
         double temp1 = pow(2.0, -k);
         temp = pow(2.0, temp1);
         current *= temp;
+        k += 1;
     }while(fabs(current - previous) > epsilon);
     return current;
 }
@@ -171,7 +172,7 @@ double fourth_equation_sqrt(double epsilon){
     return x;
 }
 
-double C(double m, double k){
+double C(int m, int k){
     if (k > m || m < 0) return 0.0;
     double chisl = factorial(m);
     double znam = factorial(k) * factorial(m - k);
@@ -180,11 +181,11 @@ double C(double m, double k){
 
 double fifth_lim_gamma(double epsilon){
     int m = 1;
-    double current = 0.0, previous;
+    double current = 0.0, previous = 0.0;
     do{
         previous = current;
         current = 0.0;
-        for (int k = 1; k < m; k++){
+        for (int k = 1; k <= m; k++){
             current += C(m, k) * (pow(-1, k) / k) * log(factorial(k));
         }
         m += 1;
@@ -194,15 +195,22 @@ double fifth_lim_gamma(double epsilon){
 
 double fifth_row_gamma(double epsilon){
     double sum = -M_PI * M_PI / 6.0;
-    double k = 2.0;
-    double current = 0.0, previous;
+    int k = 2;
+    double current = 0.0, previous = 0.0;
+    double l = 0;
     do{
         previous = current;
-        int sqrt_k = (int)sqrt(k);
-        current += (1.0 / (sqrt_k * sqrt_k)) - (1.0 / k);
+        l = sqrt(k);
+        if (fmod(l,1.0) == 0)
+        {
+            k +=
+                    1;
+            l = (int)pow(k, 1.0/2.0);
+        }
+        current += (1.0 / pow((int)l, 2.0)) - (1.0 / k);
         k += 1;
     }while(fabs(current - previous) > epsilon);
-    return current;
+    return current - pow(M_PI, 2)/6;
 }
 
 int is_prime(int x) {
@@ -241,7 +249,7 @@ int main(int argc, char* argv[]){
     double epsilon;
     if(str_to_double(argv[1], &epsilon) != OK || epsilon <= 0)
     {
-        printf("Некорректный ввод epsilon\n");
+        printf("Ошибка ввода epsilon\n");
         return INVALID_INPUT;
     }
 
@@ -275,16 +283,19 @@ int main(int argc, char* argv[]){
         ++precision;
     }
     for(int i = 0; i < 15; i++){
-        if(i%5 == 0){
+        if (i%5 == 0){
             printf("\n %6c%s", ' ', ways[i/5]);
         }
         printf("\nresult for %s:", constants[i%5]);
-        if (results[i] != INFINITY && !isnan(results[i])) {
+        if (results[i] != INFINITY && !isnan(results[i])){
             printf(" %.*f", precision, results[i]);
-        } else {
+        }
+        else{
             printf(" couldn't calculate constant with given accuracy");
         }
     }
+
+    printf("\n");
 
     return 0;
 }
