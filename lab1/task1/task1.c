@@ -39,6 +39,7 @@ enum errors natural_to_100(long int x, int** result, int* size){
                 capacity *= 2;
                 int *new_memory = realloc(*result, capacity * sizeof(int));
                 if (new_memory == NULL){
+                    free(result);
                     return INVALID_MEMORY;
                 }
                 *result = new_memory;
