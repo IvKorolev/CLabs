@@ -9,4 +9,6 @@ add_executable(CLabs
         lab1/task6/task6.c
         lab1/task5/task5.c
         lab1/task4/task4.c
-        lab1/task2/task2.c)
+        lab1/task2/task2.c
+        lab1/task8/task8.c
+        lab1/task10/task10.c)
