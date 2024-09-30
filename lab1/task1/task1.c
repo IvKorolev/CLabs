@@ -140,11 +140,11 @@ enum errors nat_sum(long int x, long long int *result){
     return OK;
 }
 
-enum errors fact(long int x, unsigned long long int *result){
+enum errors fact(long int x, unsigned long long int *result) {
     *result = 1;
     if (x < 0) return INVALID_INPUT;
-    for (int i = 2; i <= x; i++){
-        if (*result*i > ULLONG_MAX || *result*i < INT_MIN) return INVALID_MEMORY;
+    for (long int i = 2; i <= x; i++) {
+        if (*result > ULLONG_MAX / i) return INVALID_MEMORY;
         *result *= i;
     }
     return OK;
@@ -193,7 +193,10 @@ int main (int argc, char* argv[]) {
             if(result1 != NULL) free(result1);
             break;
         case 'p':
-            if(is_prime(number)){
+            if(number == 0 || number == 1) {
+                printf("Число не является ни простым, ни составным\n");
+            }
+            else if(is_prime(number)){
                 printf("Число простое\n");
             }
             else{
@@ -221,13 +224,12 @@ int main (int argc, char* argv[]) {
         case 'e':
             long int** result3 = NULL;
             enum errors e = st_table(number, &result3);
-            if (e == INVALID_INPUT || number < 0){
-                printf("Ошибка ввода, число должно быть не больше 10\n");
+            if (e == INVALID_INPUT || number <= 0){
+                printf("Ошибка ввода, число должно быть не больше 10 и больше 0\n");
                 return INVALID_INPUT;
             }
             if (e == INVALID_MEMORY){
                 printf("Ошибка памяти\n");
-                //if (result3 != NULL) free(result3);
                 return INVALID_MEMORY;
             }
             for (int i = 1; i < 11; i++){
