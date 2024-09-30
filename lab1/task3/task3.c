@@ -20,7 +20,7 @@ enum errors str_to_long_double(const char *x, ld *res){
         return INVALID_INPUT;
     }
 
-    if (fabsl(*res) >= LDBL_MAX || fabsl(*res) <= LDBL_MIN){
+    if (fabsl(*res) >= LDBL_MAX){
         return INVALID_INPUT;
     }
 
@@ -99,8 +99,8 @@ enum errors triangle(ld a, ld b, ld c, ld epsilon){
     }
 
     if(!check_overflow_double(&a, &a, epsilon) ||
-        !check_overflow_double(&b, &b, epsilon) ||
-        !check_overflow_double(&c, &c, epsilon))
+       !check_overflow_double(&b, &b, epsilon) ||
+       !check_overflow_double(&c, &c, epsilon))
         return ERROR_OVERFLOW;
 
     ld max_side = fmaxl(fmaxl(a, b), c);
@@ -130,6 +130,12 @@ enum errors triangle(ld a, ld b, ld c, ld epsilon){
 
 int main(int argc, char* argv[]){
 
+    if (argc < 4)
+    {
+        printf("Ошибка: некорректный ввод\n");
+        return INVALID_INPUT;
+    }
+
     if (!((argv[1][0] == '/' || argv[1][0] == '-') && (argv[1][2] == '\0'))){
         printf("Ошибка ввода флага\n");
         return INVALID_INPUT;
@@ -150,7 +156,26 @@ int main(int argc, char* argv[]){
                 printf("Ошибка: одно из чисел невалидно\n");
                 return INVALID_INPUT;
             }
-            permutations(a, b, c, epsilon);
+
+            if (compare_with_epsilon(a, 0.0L, epsilon) &&
+                compare_with_epsilon(b, 0.0L, epsilon) &&
+                compare_with_epsilon(c, 0.0L, epsilon)) {
+                printf("Ошибка: все три аргумента равны нулю\n");
+                return INVALID_INPUT;
+            }
+
+            if (compare_with_epsilon(a, 0.0L, epsilon)){
+                if (compare_with_epsilon(b, 0.0L, epsilon)){
+                    printf("Уравнение не имеет решений\n");
+                }
+                else{
+                    ld x = -c / b;
+                    printf("Линейное уравнение. Один корень x = %Lf\n", x);
+                }
+            }
+            else{
+                permutations(a, b, c, epsilon);
+            }
             break;
 
         case 'm':
