@@ -77,7 +77,7 @@ int main() {
     int base;
     long long int max_value = 0;
     long long int current_value;
-    char *endptr;
+    char *endptr, max_result[100];
     char result[100];
 
     scanf("%d", &base);
@@ -108,10 +108,11 @@ int main() {
 
         if (llabs(current_value) > llabs(max_value)) {
             max_value = current_value;
+            strcpy(max_result, input);
         }
     }
 
-    printf("Максимальное число по модулю: %lld\n", max_value);
+    printf("Максимальное число по модулю: %s\n", max_result);
 
     for (int i = 9; i <= 36; i+= 9){
         if(convert_to_base(max_value, i, result, sizeof(result)) == OK){
