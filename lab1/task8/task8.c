@@ -31,7 +31,7 @@ int find_min_base(const char *str) {
 
 enum errors convert_to_decimal(const char *str, int base, long long int *result) {
     char *endptr;
-    *result = strtoll(str, NULL, base);
+    *result = strtoll(str, &endptr, base);
     if (*endptr != '\0' || (*result == LLONG_MAX || *result == LLONG_MIN)) {
         return INVALID_INPUT;
     }
