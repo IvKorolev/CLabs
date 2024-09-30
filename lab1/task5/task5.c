@@ -69,7 +69,7 @@ ld sum_c(ld x, ld epsilon){
     int n = 0;
 
     do{
-        term = powl(3, n) * factorial(n) * powl(x, 2 * n) / factorial(3 * n);
+        term = powl(3, 3*n) * pow(factorial(n), 3) * powl(x, 2 * n) / factorial(3 * n);
         sum += term;
         n++;
     }while (fabsl(term) > epsilon);
@@ -145,9 +145,14 @@ int main(int argc, char *argv[]){
 
     printf("Сумма ряда a: %.15Lf\n", result_a);
     printf("Сумма ряда b: %.15Lf\n", result_b);
-    printf("Сумма ряда c: %.15Lf\n", result_c);
-    if (result_d == INVALID_MEMORY) {
-        printf("Ошибка при вычислении ряда d: получено значение inf\n");
+    if(x >= 1 || x <= -1){
+        printf("Ошибка, ряд расходится\n");
+    }
+    else{
+        printf("Сумма ряда c: %.15Lf\n", result_c);
+    }
+    if(x >= 1 || x <= -1){
+        printf("Ошибка, ряд расходится\n");
     }
     else if (result_d != INVALID_INPUT){
         printf("Сумма ряда d: %.15Lf\n", res);
