@@ -13,6 +13,9 @@ enum errors {
 
 enum errors validate_input(const char *str, int base) {
     for (int i = 0; str[i] != '\0'; i++) {
+        if(str[0] == '-'){
+            continue;
+        }
         if (isalpha(str[i])) {
             if (!isupper(str[i]) || (str[i] - 'A' + 10 >= base)) {
                 return INVALID_INPUT;
@@ -112,7 +115,7 @@ int main() {
         }
     }
 
-    printf("Максимальное число по модулю: %s\n", max_result);
+    printf("Максимальное число по модулю: %lld\n", max_value);
 
     for (int i = 9; i <= 36; i+= 9){
         if(convert_to_base(max_value, i, result, sizeof(result)) == OK){
