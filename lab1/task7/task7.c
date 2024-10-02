@@ -56,6 +56,16 @@ void process_lexeme(char* lexeme, int position, FILE* output) {
     }
 }
 
+const char* get_filename(const char* path) {
+    const char* last_slash = strrchr(path, '/');
+
+    if (last_slash != NULL) {
+        return last_slash + 1;
+    }
+
+    return path;
+}
+
 void second(FILE* input, FILE* output) {
     char lexeme[100];
     int position = 1;
@@ -92,6 +102,18 @@ int main(int argc, char* argv[]){
                 printf("Ошибка открытия одного из файлов\n");
                 return INVALID_MEMORY;
             }
+            const char* rinput_filename1 = get_filename(argv[2]);
+            const char* rinput_filename2 = get_filename(argv[3]);
+            const char* routput_filename = get_filename(argv[4]);
+
+            if (strcmp(rinput_filename1, routput_filename) == 0) {
+                printf("Ошибка: входной и выходной файлы имеют одинаковые имена\n");
+                return INVALID_INPUT;
+            }
+            if (strcmp(rinput_filename2, routput_filename) == 0) {
+                printf("Ошибка: входной и выходной файлы имеют одинаковые имена\n");
+                return INVALID_INPUT;
+            }
             first(input1, input2, output);
             fclose(input1);
             fclose(input2);
@@ -109,6 +131,12 @@ int main(int argc, char* argv[]){
                 fclose(output_a);
                 printf("Ошибка открытия одного из файлов\n");
                 return INVALID_MEMORY;
+            }
+            const char* ainput_filename1 = get_filename(argv[2]);
+            const char* aoutput_filename = get_filename(argv[3]);
+            if (strcmp(ainput_filename1, aoutput_filename) == 0) {
+                printf("Ошибка: входной и выходной файлы имеют одинаковые имена\n");
+                return INVALID_INPUT;
             }
             second(input, output_a);
             fclose(input);
