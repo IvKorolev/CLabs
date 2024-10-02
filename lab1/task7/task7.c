@@ -58,11 +58,9 @@ void process_lexeme(char* lexeme, int position, FILE* output) {
 
 const char* get_filename(const char* path) {
     const char* last_slash = strrchr(path, '/');
-
     if (last_slash != NULL) {
         return last_slash + 1;
     }
-
     return path;
 }
 
