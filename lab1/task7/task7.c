@@ -36,17 +36,24 @@ void first(FILE* input1, FILE* input2, FILE* output){
 void process_lexeme(char* lexeme, int position, FILE* output) {
     if (position % 10 == 0) {
         for (int i = 0; lexeme[i] != '\0'; i++) {
-            char lower_char = tolower(lexeme[i]);
-            fprintf(output, "%ld ", strtol((char[2]){lower_char, '\0'}, NULL, 4));
+            int ascii_code = tolower(lexeme[i]);
+            char base4[100];
+            int index = 99;
+            base4[index] = '\0';
+            while (ascii_code > 0) {
+                base4[--index] = (ascii_code % 4) + '0';
+                ascii_code /= 4;
+            }
+            fprintf(output, "%s ", &base4[index]);
         }
     }
     else if (position % 5 == 0){
-        for (int i = 0; lexeme[i] != '\0'; i++) {
+        for (int i = 0; lexeme[i] != '\0'; i++){
             fprintf(output, "%o ", lexeme[i]);
         }
     }
     else if (position % 2 == 0){
-        for (int i = 0; lexeme[i] != '\0'; i++) {
+        for (int i = 0; lexeme[i] != '\0'; i++){
             fprintf(output, "%c", tolower(lexeme[i]));
         }
         fprintf(output, " ");
@@ -55,6 +62,7 @@ void process_lexeme(char* lexeme, int position, FILE* output) {
         fprintf(output, "%s ", lexeme);
     }
 }
+
 
 const char* get_filename(const char* path) {
     const char* last_slash = strrchr(path, '/');
