@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.28)
+cmake_minimum_required(VERSION 3.22)
 project(CLabs C)
 
 set(CMAKE_C_STANDARD 11)
@@ -15,3 +15,5 @@ add_executable(CLabs
         lab1/task7/task7.c
         lab1/task9/task9.c
         lab2/task1/task1.c)
+
+add_executable(Task1 lab1/task1/task1.c)
