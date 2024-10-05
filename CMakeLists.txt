@@ -17,3 +17,5 @@ add_executable(CLabs
         lab2/task1/task1.c)
 
 add_executable(Task7 lab1/task7/task7.c)
+
+add_executable(Task3 lab1/task3/task3.c)
