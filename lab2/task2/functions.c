@@ -53,26 +53,37 @@ enum errors first(double* result, int count, ...){
     return OK;
 }
 
-double power(double x, int n) {
+enum errors second(double x, int n, double *result) {
     if (n == 0) {
-        return 1.0;  // Базовый случай: x^0 = 1
+        *result = 1.0;
+        return OK;
     }
 
-    // Обработка отрицательной степени
     if (n < 0) {
-        return 1.0 / power(x, -n);
+        if (x == 0.0) {
+            return INVALID_INPUT;
+        }
+        enum errors status = second(x, -n, result);
+        if (status == OK) {
+            *result = 1.0 / *result;
+        }
+        return status;
     }
 
-    // Рекурсивное вычисление
-    double halfPower = power(x * x, n / 2);  // Возведение в квадрат и деление степени пополам
+    double halfResult;
+    enum errors status = second(x * x, n / 2, &halfResult);
+    if (status != OK) {
+        return status;
+    }
+    if (halfResult > DBL_MAX || halfResult < -DBL_MAX) {
+        return ERROR_OVERFLOW;
+    }
 
-    if (!(n & 1)) {
-        return x * halfPower;  // Если степень нечётная
+    if (n & 1) {
+        *result = x * halfResult;
     } else {
-        return halfPower;
+        *result = halfResult;
     }
-}
 
-enum errors second(double* result, double chislo, int base){
-
+    return OK;
 }

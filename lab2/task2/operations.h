@@ -21,5 +21,6 @@ int check_overflow(double * number);
 enum errors str_to_int(const char *x, long int *res);
 enum errors str_to_double(const char *x, double *res);
 enum errors first(double* result,int count, ...);
+enum errors second(double x, int n, double *result);
 
 #endif //CLABS_OPERATIONS_H
