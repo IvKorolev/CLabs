@@ -105,14 +105,14 @@ int main(int argc, char* argv[]){
                 return INVALID_MEMORY;
             }
             for (int i = 0; i < A_size; i++) {
-                A[i] = rand() % 2001 - 1000; // от -1000 до 1000
+                A[i] = rand() % 2001 - 1000;
                 printf("A[%d] = %d\n", i, A[i]);
             }
 
             printf("\n");
 
             for (int i = 0; i < B_size; i++) {
-                B[i] = rand() % 2001 - 1000; // от -1000 до 1000
+                B[i] = rand() % 2001 - 1000;
                 printf("B[%d] = %d\n", i, B[i]);
             }
 
