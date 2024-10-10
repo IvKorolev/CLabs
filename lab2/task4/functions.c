@@ -95,13 +95,13 @@ enum errors second(double *result, double point, int degree, ...){
 }
 
 char* my_strndup(const char *str, size_t n) {
-    char *result = (char*)malloc(n + 1); // выделяем память под n символов плюс завершающий нуль
+    char *result = (char*)malloc(n + 1);
     if (result == NULL) {
-        return NULL; // Если память не выделена, возвращаем NULL
+        return NULL;
     }
-    strncpy(result, str, n);  // Копируем первые n символов
-    result[n] = '\0';  // Добавляем завершающий нуль
-    return result;     // Возвращаем копию подстроки
+    strncpy(result, str, n);
+    result[n] = '\0';
+    return result;
 }
 
 int is_kaprekar(long num) {
@@ -121,7 +121,6 @@ int is_kaprekar(long num) {
     return 0;
 }
 
-// Функция для нахождения чисел Капрекара среди строковых представлений чисел
 enum errors third(double ** result, int *size, int base, ...) {
     int capacity = 4;
     *result = (double*)malloc(sizeof(double) * capacity);
@@ -135,15 +134,14 @@ enum errors third(double ** result, int *size, int base, ...) {
     int count = 0;
     while (1) {
         const char *str = va_arg(args, const char*);
-        if (str == NULL) break;  // Если строка NULL, значит это конец аргументов
+        if (str == NULL) break;
 
         long double num;
         enum errors status = str_to_long_double(str, &num);
         if (status != OK) {
-            continue;  // Пропускаем некорректные строки
+            continue;
         }
 
-        // Проверяем, является ли число числом Капрекара
         if (is_kaprekar(num)) {
             if (count >= capacity) {
                 capacity *= 2;
