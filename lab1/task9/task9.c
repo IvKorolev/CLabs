@@ -103,8 +103,10 @@ int main(int argc, char* argv[]) {
         case 1: {
             srand(time(NULL));
 
-            int A_size = rand() % (10000 - 10 + 1) + 10;
-            int B_size = rand() % (10000 - 10 + 1) + 10;
+            //int A_size = rand() % (10000 - 10 + 1) + 10;
+            //int B_size = rand() % (10000 - 10 + 1) + 10;
+            int A_size = 20;
+            int B_size = 20;
 
             int* A = (int*)malloc(A_size * sizeof(int));
             int* B = (int*)malloc(B_size * sizeof(int));
@@ -130,13 +132,7 @@ int main(int argc, char* argv[]) {
             }
 
             qsort(B, B_size, sizeof(int), compare);
-
-            printf("\nОтсортированный массив B:\n");
-            for (int i = 0; i < B_size; i++) {
-                printf("%d ", B[i]);
-            }
             printf("\n");
-
             for (int i = 0; i < A_size; i++) {
                 int closest = find_closest(A[i], B, B_size);
                 C[i] = A[i] + closest;
