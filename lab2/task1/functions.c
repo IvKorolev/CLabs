@@ -117,10 +117,20 @@ enum errors concatenate_all(char** strs, int count_str, char** result, unsigned 
     }
     srand(res);
     int rand_num;
-    for(int i = 0; i < count_str; ++i)
+    int temp[count_str];
+    for (int i = 0; i < count_str; ++i){
+        temp[i] = 0;
+    }
+    int module = count_str;
+    while(count_str)
     {
-        rand_num = rand() % count_str;
+        rand_num = rand() % module;
+        if (temp[rand_num] == 1){
+            continue;
+        }
         concat_string(strs[rand_num], result, &len);
+        temp[rand_num] = 1;
+        count_str--;
     }
     return OK;
 }
