@@ -7,7 +7,7 @@
 #include <ctype.h>
 #include <time.h>
 
-enum errors{
+enum errors {
     INVALID_INPUT,
     INVALID_MEMORY,
     ERROR_OVERFLOW,
@@ -27,7 +27,7 @@ enum errors str_to_int(const char *x, long int *res) {
     return OK;
 }
 
-enum errors swap_max_and_min(int arr[], long int a, long int b){
+enum errors swap_max_and_min(int arr[], long int a, long int b) {
     int max_index = 0, min_index = 0;
     for (int i = 1; i < 20; i++) {
         if (arr[i] > arr[max_index]) {
@@ -43,31 +43,46 @@ enum errors swap_max_and_min(int arr[], long int a, long int b){
     return OK;
 }
 
-int find_closest(int value, int* B, int B_size) {
-    int closest = B[0];
-    int min_diff = abs(value - B[0]);
+int compare(const void *a, const void *b) {
+    return (*(int *)a - *(int *)b);
+}
 
-    for (int i = 1; i < B_size; i++) {
-        int diff = abs(value - B[i]);
-        if (diff < min_diff) {
-            closest = B[i];
-            min_diff = diff;
+int find_closest(int value, int* B, int B_size) {
+    int left = 0;
+    int right = B_size - 1;
+    int closest = B[0];
+
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+
+        if (B[mid] == value) {
+            return B[mid];
+        }
+
+        if (abs(B[mid] - value) < abs(closest - value)) {
+            closest = B[mid];
+        }
+
+        if (B[mid] < value) {
+            left = mid + 1;
+        } else {
+            right = mid - 1;
         }
     }
 
     return closest;
 }
 
-int main(int argc, char* argv[]){
+int main(int argc, char* argv[]) {
     int arguments = argc;
-    switch(arguments){
-        case 3:
+    switch (arguments) {
+        case 3: {
             long int a, b;
-            if (str_to_int(argv[1], &a) != OK || str_to_int(argv[2], &b) != OK){
+            if (str_to_int(argv[1], &a) != OK || str_to_int(argv[2], &b) != OK) {
                 printf("Ошибка ввода аргументов\n");
                 return INVALID_INPUT;
             }
-            if (a >= b){
+            if (a >= b) {
                 printf("Ошибка диапозона\n");
                 return INVALID_INPUT;
             }
@@ -84,14 +99,12 @@ int main(int argc, char* argv[]){
             }
             printf("\n");
             break;
-        case 1:
+        }
+        case 1: {
             srand(time(NULL));
 
             int A_size = rand() % (10000 - 10 + 1) + 10;
             int B_size = rand() % (10000 - 10 + 1) + 10;
-
-//            int A_size = 20;
-//            int B_size = 20;
 
             int* A = (int*)malloc(A_size * sizeof(int));
             int* B = (int*)malloc(B_size * sizeof(int));
@@ -116,7 +129,14 @@ int main(int argc, char* argv[]){
                 printf("B[%d] = %d\n", i, B[i]);
             }
 
+            qsort(B, B_size, sizeof(int), compare);
+
+            printf("\nОтсортированный массив B:\n");
+            for (int i = 0; i < B_size; i++) {
+                printf("%d ", B[i]);
+            }
             printf("\n");
+
             for (int i = 0; i < A_size; i++) {
                 int closest = find_closest(A[i], B, B_size);
                 C[i] = A[i] + closest;
@@ -127,6 +147,7 @@ int main(int argc, char* argv[]){
             free(B);
             free(C);
             break;
+        }
         default:
             printf("Ошибка. Неправильное количество аргументов\n");
             return INVALID_INPUT;

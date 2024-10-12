@@ -40,7 +40,7 @@ void print_root(ld x) {
 enum errors solve_quadratic(ld a, ld b, ld c, const ld epsilon) {
     if (compare_with_epsilon(a, 0.0L, epsilon)) {
         if (compare_with_epsilon(b, 0.0L, epsilon)) {
-            printf("Это не уравнение (все коэффициенты равны нулю)\n");
+            printf("Это не уравнение\n");
             return INVALID_INPUT;
         } else {
             ld x = -c / b;

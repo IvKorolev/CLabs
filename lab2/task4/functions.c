@@ -54,6 +54,7 @@ enum errors first(int num_vertices, ...) {
         }
         else{
             if ((first_cross_product > 0 && cross < 0) || (first_cross_product < 0 && cross > 0)) {
+                va_end(args);
                 return INVALID_INPUT;
             }
         }
@@ -69,6 +70,7 @@ enum errors first(int num_vertices, ...) {
         double next_y = va_arg(args, double);
         double cross = cross_product(prev_x, prev_y, curr_x, curr_y, next_x, next_y);
         if ((first_cross_product > 0 && cross < 0) || (first_cross_product < 0 && cross > 0)) {
+            va_end(args);
             return INVALID_INPUT;
         }
     }
@@ -147,6 +149,7 @@ enum errors third(double ** result, int *size, int base, ...) {
                 capacity *= 2;
                 *result = (double*)realloc(*result, sizeof(double) * capacity);
                 if (*result == NULL) {
+                    va_end(args);
                     return INVALID_MEMORY;
                 }
             }
