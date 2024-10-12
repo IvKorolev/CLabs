@@ -11,11 +11,13 @@ enum errors dihotomy(double *result, double left, double right, double epsilon, 
     }
     while ((right - left) / 2 > epsilon){
         middle = (left + right) / 2;
-        if (fabs(func(middle)) < epsilon){
+        double res;
+        res = func(middle);
+        if (fabs(res) < epsilon){
             *result = middle;
             return OK;
         }
-        if (func(middle) * func(left) < 0) {
+        if (res * func(left) < 0) {
             right = middle;
         }
         else {
@@ -33,7 +35,7 @@ double func1(double x){
 
 //x - 2
 double func2(double x){
-    return x - 2;
+    return -x + 2;
 }
 
 //x^2 - 2x = 1

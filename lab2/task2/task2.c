@@ -3,7 +3,7 @@
 int main(int argc, char* argv[]){
     int count = 5;
     double result1;
-    enum errors status1 = first(&result1, count, 1.0, 1.2, 1.3, 1.4, 1.5);
+    enum errors status1 = first(&result1, count, 1.0, 1.2, 1.3, 0, 1.5);
     if(status1 == OK){
         printf("%lf\n", result1);
     }
@@ -14,7 +14,7 @@ int main(int argc, char* argv[]){
         printf("Ошибка. Произошло переполнение\n");
     }
     double result2;
-    enum errors status2 = second(2, 3, &result2);
+    enum errors status2 = second(2, -2, &result2);
     if (status2 == OK){
         printf("%lf\n", result2);
     }
