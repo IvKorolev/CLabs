@@ -42,6 +42,9 @@ void process_lexeme(char* lexeme, int position, FILE* output) {
             base4[index] = '\0';
             while (ascii_code > 0) {
                 base4[--index] = (ascii_code % 4) + '0';
+                if (ascii_code == 0){
+                    break;
+                }
                 ascii_code /= 4;
             }
             fprintf(output, "%s ", &base4[index]);
