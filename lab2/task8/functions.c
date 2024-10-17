@@ -31,17 +31,18 @@ enum errors sum_nums(const char* num1, const char* num2, int base, char** result
     while (i1 >= 0 || i2 >= 0 || carry) {
         char digit_str[2] = {0, 0};
 
-        if (i1 >= 0) {
+        if (i1 >= 0){
             digit_str[0] = num1[i1];
-        } else {
+        }
+        else{
             digit_str[0] = '0';
         }
         int digit1 = strtol(digit_str, NULL, base);
 
-        if (i2 >= 0) {
+        if (i2 >= 0){
             digit_str[0] = num2[i2];
         }
-        else {
+        else{
             digit_str[0] = '0';
         }
         int digit2 = strtol(digit_str, NULL, base);
@@ -78,7 +79,7 @@ enum errors first(char ** result, int base, int count, ...) {
     char* current_sum = va_arg(arguments, char*);
 
     for (int i = 0; i < strlen(current_sum); i++) {
-        if (strtol((char[]){current_sum[i], 0}, NULL, base) >= base) {
+        if (strtol((char[]){current_sum[i], 0}, NULL, base) >= base){
             va_end(arguments);
             return INVALID_INPUT;
         }
@@ -88,7 +89,7 @@ enum errors first(char ** result, int base, int count, ...) {
         char* str = va_arg(arguments, char*);
 
         for (int j = 0; j < strlen(str); j++) {
-            if (strtol((char[]){str[j], 0}, NULL, base) >= base) {
+            if (strtol((char[]){str[j], 0}, NULL, base) >= base){
                 va_end(arguments);
                 return INVALID_INPUT;
             }
