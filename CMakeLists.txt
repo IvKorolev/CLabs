@@ -29,6 +29,10 @@ add_executable(CLabs
         lab2/task9/task9.c
         lab2/task9/functions.c
         lab2/task9/operations.h
+        lab2/task3/task3.c
+        lab2/task3/functions.c
+        lab2/task3/operations.h
+        lab2/task3/func.c
 )
 
 add_executable(Task7 lab1/task7/task7.c)
