@@ -2,7 +2,7 @@
 
 int main(int argc, char* argv[]){
     char *result;
-    enum errors status = first(&result, 13, 3, "AA", "AB", "CA");
+    enum errors status = first(&result, 13, 3, "A", "F", "CA");
     if (status == INVALID_INPUT){
         printf("Ошибка ввода системы счисления или чисел\n");
         return INVALID_INPUT;

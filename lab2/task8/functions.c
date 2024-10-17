@@ -68,7 +68,7 @@ enum errors sum_nums(const char* num1, const char* num2, int base, char** result
     return OK;
 }
 
-enum errors first(char ** result, int base, int count, ...) {
+enum errors first(char **result, int base, int count, ...) {
     if (base < 2 || base > 36 || count <= 0) {
         return INVALID_INPUT;
     }
@@ -79,7 +79,8 @@ enum errors first(char ** result, int base, int count, ...) {
     char* current_sum = va_arg(arguments, char*);
 
     for (int i = 0; i < strlen(current_sum); i++) {
-        if (strtol((char[]){current_sum[i], 0}, NULL, base) >= base){
+        if (!((current_sum[i] >= '0' && current_sum[i] <= '9' && current_sum[i] - '0' < base) ||
+              (current_sum[i] >= 'A' && current_sum[i] < 'A' + base - 10))) {
             va_end(arguments);
             return INVALID_INPUT;
         }
@@ -89,7 +90,8 @@ enum errors first(char ** result, int base, int count, ...) {
         char* str = va_arg(arguments, char*);
 
         for (int j = 0; j < strlen(str); j++) {
-            if (strtol((char[]){str[j], 0}, NULL, base) >= base){
+            if (!((str[j] >= '0' && str[j] <= '9' && str[j] - '0' < base) ||
+                  (str[j] >= 'A' && str[j] < 'A' + base - 10))) {
                 va_end(arguments);
                 return INVALID_INPUT;
             }
