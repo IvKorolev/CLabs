@@ -86,6 +86,7 @@ enum errors first(char **result, int base, int count, ...) {
         }
     }
 
+    char* temp = NULL;
     for (int i = 1; i < count; i++) {
         char* str = va_arg(arguments, char*);
 
@@ -103,6 +104,10 @@ enum errors first(char **result, int base, int count, ...) {
             va_end(arguments);
             return status;
         }
+        if (temp != NULL) {
+            free(temp);
+        }
+        temp = new_sum;
         current_sum = new_sum;
     }
 
