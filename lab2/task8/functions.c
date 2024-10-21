@@ -4,7 +4,6 @@ enum errors reverse_str(const char* str, char** res){
     int length = strlen(str);
     (*res) = (char*)malloc(sizeof(char) * (length + 1));
     if (*res == NULL){
-        free(res);
         return INVALID_MEMORY;
     }
     int i = 0;
@@ -117,6 +116,6 @@ enum errors first(char **result, int base, int count, ...) {
         current_sum++;
     }
 
-    *result = current_sum;
+    *result = strdup(current_sum);
     return OK;
 }
