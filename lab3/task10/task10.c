@@ -10,12 +10,18 @@ int main(int argc, char* argv[]){
     FILE* input_file = fopen(argv[1], "r");
     if (result == NULL || input_file == NULL){
         printf("Ошибка открытия одного из файлов\n");
+        if (input_file != NULL) fclose(input_file);
+        if (result != NULL) fclose(result);
         return INVALID_MEMORY;
     }
     enum errors status = first(input_file, result);
     if (status != OK){
         printf("\n");
+        fclose(input_file);
+        fclose(result);
         return INVALID_INPUT;
     }
+    fclose(input_file);
+    fclose(result);
     return 0;
 }
