@@ -8,23 +8,18 @@ enum errors first(FILE* input, FILE* output){
         for (int i = 0; i < length; i++){
             char symbol;
             symbol = buffer[i];
-            switch(symbol){
-                case '(':
-                    count_spaces += 1;
-                    break;
-                case ')':
-                    count_spaces -= 1;
-                    break;
-                case ' ':
-                    continue;
-                case ',':
-                    continue;
-                default:
-                    for (int j = 0; j < count_spaces; j++) {
-                        fputc(' ', output);
-                    }
-                    fputc(symbol, output);
-                    fputc('\n', output);
+            if (isalpha(symbol)) {
+                for (int j = 0; j < count_spaces; j++) {
+                    fputc(' ', output);
+                }
+                fputc(symbol, output);
+                fputc('\n', output);
+            }
+            else if (symbol == '('){
+                count_spaces += 1;
+            }
+            else if (symbol == ')'){
+                count_spaces -= 1;
             }
         }
     }
