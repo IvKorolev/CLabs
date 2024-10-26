@@ -12,13 +12,13 @@ int main(int argc, char* argv[]) {
         char* result = (char*)malloc(sizeof(char) * capacity);
         if (result == NULL)
         {
-            printf("Error");
+            printf("Ошибка выделения памяти\n");
             return INVALID_MEMORY;
         }
 
         if(first(156, r, &result, &capacity, &count, base, &flag_negative) != OK)
         {
-            printf("Error");
+            printf("Ошибка ввода\n");
             free(result);
             return INVALID_INPUT;
         }
