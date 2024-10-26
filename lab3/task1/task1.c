@@ -1,0 +1,31 @@
+#include "operations.h"
+
+int main(int argc, char* argv[]) {
+    char* base = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    int count;
+
+    for (int r = 1; r <= 5; r = sum(r, 1)){
+
+        int capacity = 1;
+        int flag_negative = 0;
+
+        char* result = (char*)malloc(sizeof(char) * capacity);
+        if (result == NULL)
+        {
+            printf("Error");
+            return INVALID_MEMORY;
+        }
+
+        if(first(156, r, &result, &capacity, &count, base, &flag_negative) != OK)
+        {
+            printf("Error");
+            free(result);
+            return INVALID_INPUT;
+        }
+
+        print_num(flag_negative, result, count, r);
+        flag_negative = 0;
+        free(result);
+    }
+    return 0;
+}
