@@ -17,16 +17,30 @@ enum errors create_list(FILE* input, Employee** result, int *size){
     char buffer[1024];
     while(fgets(buffer, sizeof(buffer), input) != NULL){
         Employee person;
-        sscanf(buffer, "%d %s %s %lf", &person.id, person.name, person.last_name, &person.payment);
-        (*result)[(*size)++] = person;
-        if (*size == capacity){
-            capacity *= 2;
-            Employee *new_memory = realloc(*result, capacity * sizeof(Employee));
-            if (new_memory == NULL){
-                free(*result);
-                return INVALID_MEMORY;
+        char id_str[50], payment_str[50];
+        if (sscanf(buffer, "%s %s %s %s", id_str, person.name, person.last_name, payment_str) == 4){
+            char *endptr;
+            person.id = strtol(id_str, &endptr, 10);
+            if (*endptr != '\0' || person.id < 0) {
+                continue;
             }
-            *result = new_memory;
+            person.payment = strtod(payment_str, &endptr);
+            if (*endptr != '\0' || person.payment < 0) {
+                continue;
+            }
+            (*result)[(*size)++] = person;
+            if (*size == capacity){
+                capacity *= 2;
+                Employee *new_memory = realloc(*result, capacity * sizeof(Employee));
+                if (new_memory == NULL){
+                    free(*result);
+                    return INVALID_MEMORY;
+                }
+                *result = new_memory;
+            }
+        }
+        else{
+            continue;
         }
     }
     return OK;
