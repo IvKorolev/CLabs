@@ -20,6 +20,9 @@ typedef struct Employee{
 
 const char* get_filename(const char* path);
 enum errors create_list(FILE* input, Employee** result, int *size);
+int compare_ascending(const void* a, const void* b);
+int compare_descending(const void* a, const void* b);
+int first(const void* a, const void* b);
 
 
 #endif //CLABS_OPERATIONS_H

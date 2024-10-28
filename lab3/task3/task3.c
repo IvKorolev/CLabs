@@ -26,19 +26,22 @@ int main(int argc, char* argv[]){
     Employee* result = NULL;
     int size = 0;
     create_list(input, &result, &size);
-    /*switch(argv[1][1]){
+    switch(argv[2][1]){
         case 'a':
-
+            qsort(result, size, sizeof(Employee), compare_ascending);
+            for (int i = 0; i < size; i++){
+                fprintf(output, "%d %s %s %lf\n", result[i].id, result[i].name, result[i].last_name, result[i].payment);
+            }
             break;
         case 'd':
-
+            qsort(result, size, sizeof(Employee), compare_descending);
+            for (int i = 0; i < size; i++){
+                fprintf(output, "%d %s %s %lf\n", result[i].id, result[i].name, result[i].last_name, result[i].payment);
+            }
             break;
         default:
             printf("Такого флага нет в доступных\n");
             break;
-    }*/
-    for (int i = 0; i < size; i++){
-        printf("%d %s %s %lf\n", result[i].id, result[i].name, result[i].last_name, result[i].payment);
     }
     free(result);
     fclose(input);

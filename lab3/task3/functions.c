@@ -45,3 +45,41 @@ enum errors create_list(FILE* input, Employee** result, int *size){
     }
     return OK;
 }
+
+int compare_ascending(const void* a, const void* b) {
+    Employee *empA = (Employee *)a;
+    Employee *empB = (Employee *)b;
+
+    if (empA->payment < empB->payment) return -1;
+    if (empA->payment > empB->payment) return 1;
+
+    int last_name_cmp = strcmp(empA->last_name, empB->last_name);
+    if (last_name_cmp != 0) return last_name_cmp;
+
+    int name_cmp = strcmp(empA->name, empB->name);
+    if (name_cmp != 0) return name_cmp;
+
+    if (empA->id < empB->id) return -1;
+    if (empA->id > empB->id) return 1;
+
+    return 0;
+}
+
+int compare_descending(const void* a, const void* b) {
+    Employee *empA = (Employee *)a;
+    Employee *empB = (Employee *)b;
+
+    if (empA->payment > empB->payment) return -1;
+    if (empA->payment < empB->payment) return 1;
+
+    int last_name_cmp = strcmp(empA->last_name, empB->last_name);
+    if (last_name_cmp != 0) return -last_name_cmp;
+
+    int name_cmp = strcmp(empA->name, empB->name);
+    if (name_cmp != 0) return -name_cmp;
+
+    if (empA->id > empB->id) return -1;
+    if (empA->id < empB->id) return 1;
+
+    return 0;
+}
