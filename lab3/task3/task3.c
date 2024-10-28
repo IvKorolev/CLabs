@@ -40,6 +40,7 @@ int main(int argc, char* argv[]){
     for (int i = 0; i < size; i++){
         printf("%d %s %s %lf\n", result[i].id, result[i].name, result[i].last_name, result[i].payment);
     }
+    free(result);
     fclose(input);
     fclose(output);
     return 0;
