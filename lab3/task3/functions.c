@@ -8,6 +8,15 @@ const char* get_filename(const char* path) {
     return path;
 }
 
+enum errors valid_name(char* name){
+    for (int i = 0; i < strlen(name); i++){
+        if (!isalpha(name[i])){
+            return INVALID_INPUT;
+        }
+    }
+    return OK;
+}
+
 enum errors create_list(FILE* input, Employee** result, int *size){
     int capacity = 1;
     *result = (Employee*)malloc(sizeof(Employee) * capacity);
@@ -19,15 +28,18 @@ enum errors create_list(FILE* input, Employee** result, int *size){
         Employee person;
         char id_str[50], payment_str[50];
         if (sscanf(buffer, "%s %s %s %s", id_str, person.name, person.last_name, payment_str) == 4){
+
             char *endptr;
             person.id = strtol(id_str, &endptr, 10);
-            if (*endptr != '\0' || person.id < 0) {
-                continue;
-            }
+            if (*endptr != '\0' || person.id < 0)  continue;
+
             person.payment = strtod(payment_str, &endptr);
-            if (*endptr != '\0' || person.payment < 0) {
-                continue;
-            }
+            if (*endptr != '\0' || person.payment < 0) continue;
+
+            if(valid_name(person.name) != OK) continue;
+
+            if(valid_name(person.last_name) != OK) continue;
+
             (*result)[(*size)++] = person;
             if (*size == capacity){
                 capacity *= 2;

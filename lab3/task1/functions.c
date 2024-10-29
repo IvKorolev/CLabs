@@ -25,41 +25,33 @@ enum errors first(long int num, int r, char** res, int* capacity, int* count, ch
     *count = 0;
     int mask, digit;
 
-    if(num < 0)
-    {
+    if(num < 0){
         num = negative(num);
         *flag_negative = 1;
-
     }
     do {
-        if (*count >= *capacity)
-        {
+        if (*count >= *capacity){
             *capacity <<= 1;
-            char * new_memory = (char*)realloc(*res, *capacity * sizeof(char));
-            if(new_memory == NULL)
-            {
+            char* new_memory = (char*)realloc(*res, *capacity * sizeof(char));
+            if(new_memory == NULL){
                 return INVALID_MEMORY;
             }
             *res = new_memory;
         }
-
         mask = subtraction((1 << r), 1);
         digit = num & mask;
         (*res)[*count] = base[digit];
         *count = sum(*count, 1);
 
         num >>= r;
-    } while (num > 0);
-
+    } while(num > 0);
     return OK;
 }
 
 void print_num(int flag, char * res, int count, int base) {
     printf("Result for base 2^%d: ", base);
     if(flag) printf("-");
-
-    for (int i = count - 1; i >= 0; i = subtraction(i, 1))
-    {
+    for (int i = count - 1; i >= 0; i = subtraction(i, 1)) {
         printf("%c", res[i]);
     }
     printf("\n");
