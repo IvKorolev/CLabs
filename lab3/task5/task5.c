@@ -105,8 +105,6 @@ int main(int argc, char* argv[]){
                 scanf("%s", &choice);
                 switch(choice){
                     case 'a':
-                        printf("Введите id: ");
-                        scanf("%s", pod);
                         status1 = sort(list, argv[2], pod, 'a', size);
                         if (status1 == OK){
                             printf("Студенты отсортированы, проверьте выходной файл\n");
@@ -116,9 +114,7 @@ int main(int argc, char* argv[]){
                         }
                         break;
                     case 'b':
-                        printf("Введите фамилию: ");
-                        scanf("%s", pod);
-                        status1 = search(list, argv[2], pod, 'b', size);
+                        status1 = sort(list, argv[2], pod, 'b', size);
                         if (status1 == OK){
                             printf("Студенты отсортированы, проверьте выходной файл\n");
                         }
@@ -127,9 +123,7 @@ int main(int argc, char* argv[]){
                         }
                         break;
                     case 'c':
-                        printf("Введите имя: ");
-                        scanf("%s", pod);
-                        status1 = search(list, argv[2], pod, 'c', size);
+                        status1 = sort(list, argv[2], pod, 'c', size);
                         if (status1 == OK){
                             printf("Студенты отсортированы, проверьте выходной файл\n");
                         }
@@ -138,9 +132,7 @@ int main(int argc, char* argv[]){
                         }
                         break;
                     case 'd':
-                        printf("Введите группу: ");
-                        scanf("%s", pod);
-                        status1 = search(list, argv[2], pod, 'd', size);
+                        status1 = sort(list, argv[2], pod, 'd', size);
                         if (status1 == OK){
                             printf("Студенты отсортированы, проверьте выходной файл\n");
                         }
@@ -154,6 +146,14 @@ int main(int argc, char* argv[]){
                 }
                 break;
             case 3:
+                status1 = output_above_average_students(list, size, argv[2]);
+                if(status1 == OK){
+                    printf("Студенты со средним баллом, который выше, чем общий средний балл,\n"
+                           "выведены в выходной файл\n");
+                }
+                else{
+                    printf("Ошибка открытия файла\n");
+                }
                 break;
             default:
                 printf("Такого флага нет в существующих\n");

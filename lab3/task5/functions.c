@@ -58,7 +58,7 @@ void free_student_list(Student* list, int size) {
 }
 
 enum errors search(Student* list, const char* output_filename, char* pod, char flag, int size){
-    FILE* output = fopen(output_filename, "w");  // Открываем файл в режиме "w" для перезаписи
+    FILE* output = fopen(output_filename, "w");
     if (output == NULL) {
         printf("Ошибка открытия выходного файла\n");
         return INVALID_INPUT;
@@ -124,13 +124,91 @@ enum errors search(Student* list, const char* output_filename, char* pod, char f
     else return OK;
 }
 
+int compare_by_id(const void* a, const void* b) {
+    Student* studentA = (Student*)a;
+    Student* studentB = (Student*)b;
+    return studentA->id - studentB->id;
+}
 
+int compare_by_surname(const void* a, const void* b) {
+    Student* studentA = (Student*)a;
+    Student* studentB = (Student*)b;
+    return strcmp(studentA->surname, studentB->surname);
+}
 
-enum errors sort(Student* list, const char* output_filename, char* pod, char flag, int size){
-    FILE* output = fopen(output_filename, "w");  // Открываем файл в режиме "w" для перезаписи
+int compare_by_name(const void* a, const void* b) {
+    Student* studentA = (Student*)a;
+    Student* studentB = (Student*)b;
+    return strcmp(studentA->name, studentB->name);
+}
+
+int compare_by_group(const void* a, const void* b) {
+    Student* studentA = (Student*)a;
+    Student* studentB = (Student*)b;
+    return strcmp(studentA->group, studentB->group);
+}
+
+enum errors sort(Student* list, const char* output_filename, char* pod, char flag, int size) {
+    FILE *output = fopen(output_filename, "w");
     if (output == NULL) {
         printf("Ошибка открытия выходного файла\n");
         return INVALID_INPUT;
     }
+
+    if (flag == 'a'){
+        qsort(list, size, sizeof(Student), compare_by_id);
+    }
+    else if (flag == 'b'){
+        qsort(list, size, sizeof(Student), compare_by_surname);
+    }
+    else if (flag == 'c'){
+        qsort(list, size, sizeof(Student), compare_by_name);
+    }
+    else if (flag == 'd'){
+        qsort(list, size, sizeof(Student), compare_by_group);
+    }
+    else{
+        fclose(output);
+        return INVALID_INPUT;
+    }
+    for (int i = 0; i < size; i++) {
+        fprintf(output, "%d:%s:%s:%s:%s\n", list[i].id, list[i].surname, list[i].name, list[i].group, list[i].grades);
+    }
+    fclose(output);
+    return OK;
+}
+
+float calculate_average(unsigned char* grades){
+    int sum = 0;
+    for (int i = 0; i < 5; i++) {
+        sum += grades[i] - '0';
+    }
+    return (float)sum / 5;
+}
+
+float calculate_overall_average(Student* list, int size){
+    float total_average = 0;
+    for (int i = 0; i < size; i++) {
+        total_average += calculate_average(list[i].grades);
+    }
+    return total_average / size;
+}
+
+enum errors output_above_average_students(Student* list, int size, const char* output_filename){
+    FILE *output = fopen(output_filename, "w");
+    if (output == NULL) {
+        printf("Ошибка открытия выходного файла\n");
+        return INVALID_INPUT;
+    }
+    float overall_average = calculate_overall_average(list, size);
+    fprintf(output, "Студенты с средним баллом выше %.2f:\n", overall_average);
+
+    for (int i = 0; i < size; i++) {
+        float student_average = calculate_average(list[i].grades);
+        if (student_average > overall_average) {
+            fprintf(output, "%d:%s:%s:%s:%.2f\n", list[i].id, list[i].surname, list[i].name, list[i].group, student_average);
+        }
+    }
+    fclose(output);
     return OK;
 }

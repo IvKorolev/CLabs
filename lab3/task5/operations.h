@@ -24,5 +24,8 @@ enum errors create_list(FILE* input, Student ** result, int* size);
 void free_student_list(Student* list, int size);
 enum errors search(Student* list, const char* output_filename, char* pod, char flag, int size);
 enum errors sort(Student* list, const char* output_filename, char* pod, char flag, int size);
+float calculate_average(unsigned char* grades);
+float calculate_overall_average(Student* list, int size);
+enum errors output_above_average_students(Student* list, int size, const char* output_filename);
 
 #endif //CLABS_OPERATIONS_H
