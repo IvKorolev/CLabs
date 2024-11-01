@@ -12,6 +12,7 @@ enum errors
 };
 
 int sum(int num1, int num2);
+int multiply(int num1, int num2);
 int negative(int n);
 int subtraction(int a, int b);
 enum errors first(long int num, int r, char** res, int * capacity, int * count, char * base, int* flag_negative);

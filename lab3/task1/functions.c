@@ -13,6 +13,18 @@ int sum(int num1, int num2) {
     return res;
 }
 
+int multiply(int num1, int num2) {
+    int result;
+    while(num2 != 0){
+        if ((num2 & 0x1) == 0x1){
+            result = sum(result, num1);
+        }
+        num2 >>= 1;
+        num1 <<= 1;
+    }
+    return result;
+}
+
 int negative(int n) {
     return sum(~n, 1);
 }
@@ -32,7 +44,7 @@ enum errors first(long int num, int r, char** res, int* capacity, int* count, ch
     do {
         if (*count >= *capacity){
             *capacity <<= 1;
-            char* new_memory = (char*)realloc(*res, *capacity * sizeof(char));
+            char* new_memory = (char*)realloc(*res, multiply(*capacity, sizeof(char)));
             if(new_memory == NULL){
                 return INVALID_MEMORY;
             }

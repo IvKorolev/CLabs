@@ -9,14 +9,14 @@ int main(int argc, char* argv[]) {
         int capacity = 1;
         int flag_negative = 0;
 
-        char* result = (char*)malloc(sizeof(char) * capacity);
+        char* result = (char*)malloc(multiply(sizeof(char), capacity));
         if (result == NULL)
         {
             printf("Ошибка выделения памяти\n");
             return INVALID_MEMORY;
         }
 
-        if(first(156, r, &result, &capacity, &count, base, &flag_negative) != OK)
+        if(first(10, r, &result, &capacity, &count, base, &flag_negative) != OK)
         {
             printf("Ошибка ввода\n");
             free(result);

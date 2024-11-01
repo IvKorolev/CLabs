@@ -27,7 +27,7 @@ enum errors create_list(FILE* input, Employee** result, int *size){
     while(fgets(buffer, sizeof(buffer), input) != NULL){
         Employee person;
         char id_str[50], payment_str[50];
-        if (sscanf(buffer, "%s %s %s %s", id_str, person.name, person.last_name, payment_str) == 4){
+        if (sscanf(buffer, "%s %50s %50s %s", id_str, person.name, person.last_name, payment_str) == 4){
 
             char *endptr;
             person.id = strtol(id_str, &endptr, 10);
