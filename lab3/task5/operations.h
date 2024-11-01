@@ -23,5 +23,6 @@ const char* get_filename(const char* path);
 enum errors create_list(FILE* input, Student ** result, int* size);
 void free_student_list(Student* list, int size);
 enum errors search(Student* list, const char* output_filename, char* pod, char flag, int size);
+enum errors sort(Student* list, const char* output_filename, char* pod, char flag, int size);
 
 #endif //CLABS_OPERATIONS_H

@@ -43,7 +43,7 @@ int main(int argc, char* argv[]){
                        "b - по фамилии\n"
                        "c - по имени\n"
                        "d - по группе\n");
-                printf("Введите действие: ");
+                printf("Введите флаг: ");
                 scanf("%s", &choice);
                 switch(choice){
                     case 'a':
@@ -96,6 +96,62 @@ int main(int argc, char* argv[]){
                 }
                 break;
             case 2:
+                printf("\nВведите по чему сортировать студентов\n"
+                       "a - по id\n"
+                       "b - по фамилии\n"
+                       "c - по имени\n"
+                       "d - по группе\n");
+                printf("Введите флаг: ");
+                scanf("%s", &choice);
+                switch(choice){
+                    case 'a':
+                        printf("Введите id: ");
+                        scanf("%s", pod);
+                        status1 = sort(list, argv[2], pod, 'a', size);
+                        if (status1 == OK){
+                            printf("Студенты отсортированы, проверьте выходной файл\n");
+                        }
+                        else{
+                            printf("Не удалось найти ни одного студента\n");
+                        }
+                        break;
+                    case 'b':
+                        printf("Введите фамилию: ");
+                        scanf("%s", pod);
+                        status1 = search(list, argv[2], pod, 'b', size);
+                        if (status1 == OK){
+                            printf("Студенты отсортированы, проверьте выходной файл\n");
+                        }
+                        else{
+                            printf("Не удалось найти ни одного студента\n");
+                        }
+                        break;
+                    case 'c':
+                        printf("Введите имя: ");
+                        scanf("%s", pod);
+                        status1 = search(list, argv[2], pod, 'c', size);
+                        if (status1 == OK){
+                            printf("Студенты отсортированы, проверьте выходной файл\n");
+                        }
+                        else{
+                            printf("Не удалось найти ни одного студента\n");
+                        }
+                        break;
+                    case 'd':
+                        printf("Введите группу: ");
+                        scanf("%s", pod);
+                        status1 = search(list, argv[2], pod, 'd', size);
+                        if (status1 == OK){
+                            printf("Студенты отсортированы, проверьте выходной файл\n");
+                        }
+                        else{
+                            printf("Не удалось найти ни одного студента\n");
+                        }
+                        break;
+                    default:
+                        printf("Ошибка, такого флага нет\n");
+                        break;
+                }
                 break;
             case 3:
                 break;

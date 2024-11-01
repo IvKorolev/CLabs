@@ -68,7 +68,12 @@ enum errors search(Student* list, const char* output_filename, char* pod, char f
         int ide = strtol(pod, NULL, 10);
         for (int i = 0; i < size; i++){
             if (list[i].id == ide){
-                fprintf(output, "%d:%s:%s:%s:%s\n", list[i].id, list[i].surname, list[i].name, list[i].group, list[i].grades);
+                double sum = 0;
+                for (int j = 0; j < 5; j++) {
+                    sum += list[i].grades[j] - '0';
+                }
+                double average = sum / 5;
+                fprintf(output, "%d:%s:%s:%s:%.2f\n", list[i].id, list[i].surname, list[i].name, list[i].group, average);
                 found = 1;
             }
         }
@@ -76,7 +81,12 @@ enum errors search(Student* list, const char* output_filename, char* pod, char f
     else if (flag == 'b'){
         for (int i = 0; i < size; i++){
             if (strcmp(list[i].surname, pod) == 0){
-                fprintf(output, "%d:%s:%s:%s:%s\n", list[i].id, list[i].surname, list[i].name, list[i].group, list[i].grades);
+                double sum = 0;
+                for (int j = 0; j < 5; j++) {
+                    sum += list[i].grades[j] - '0';
+                }
+                double average = sum / 5;
+                fprintf(output, "%d:%s:%s:%s:%.2f\n", list[i].id, list[i].surname, list[i].name, list[i].group, average);
                 found = 1;
             }
         }
@@ -84,7 +94,12 @@ enum errors search(Student* list, const char* output_filename, char* pod, char f
     else if (flag == 'c'){
         for (int i = 0; i < size; i++){
             if (strcmp(list[i].name, pod) == 0){
-                fprintf(output, "%d:%s:%s:%s:%s\n", list[i].id, list[i].surname, list[i].name, list[i].group, list[i].grades);
+                double sum = 0;
+                for (int j = 0; j < 5; j++) {
+                    sum += list[i].grades[j] - '0';
+                }
+                double average = sum / 5;
+                fprintf(output, "%d:%s:%s:%s:%.2f\n", list[i].id, list[i].surname, list[i].name, list[i].group, average);
                 found = 1;
             }
         }
@@ -92,7 +107,12 @@ enum errors search(Student* list, const char* output_filename, char* pod, char f
     else if (flag == 'd'){
         for (int i = 0; i < size; i++){
             if (strcmp(list[i].group, pod) == 0){
-                fprintf(output, "%d:%s:%s:%s:%s\n", list[i].id, list[i].surname, list[i].name, list[i].group, list[i].grades);
+                double sum = 0;
+                for (int j = 0; j < 5; j++) {
+                    sum += list[i].grades[j] - '0';
+                }
+                double average = sum / 5;
+                fprintf(output, "%d:%s:%s:%s:%.2f\n", list[i].id, list[i].surname, list[i].name, list[i].group, average);
                 found = 1;
             }
         }
@@ -102,4 +122,15 @@ enum errors search(Student* list, const char* output_filename, char* pod, char f
         return INVALID_INPUT;
     }
     else return OK;
+}
+
+
+
+enum errors sort(Student* list, const char* output_filename, char* pod, char flag, int size){
+    FILE* output = fopen(output_filename, "w");  // Открываем файл в режиме "w" для перезаписи
+    if (output == NULL) {
+        printf("Ошибка открытия выходного файла\n");
+        return INVALID_INPUT;
+    }
+    return OK;
 }
