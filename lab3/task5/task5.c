@@ -166,3 +166,5 @@ int main(int argc, char* argv[]){
     fclose(input);
     return 0;
 }
+
+//Сделать перенаправление запросов из файла

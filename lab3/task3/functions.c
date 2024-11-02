@@ -6,7 +6,7 @@ const char* get_filename(const char* path) {
         return last_slash + 1;
     }
     return path;
-}
+} //realpath переделать для поиска пути до файла
 
 enum errors valid_name(char* name){
     for (int i = 0; i < strlen(name); i++){

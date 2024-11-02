@@ -16,7 +16,7 @@ int main(int argc, char* argv[]) {
             return INVALID_MEMORY;
         }
 
-        if(first(10, r, &result, &capacity, &count, base, &flag_negative) != OK)
+        if(first(154, r, &result, &capacity, &count, base, &flag_negative) != OK)
         {
             printf("Ошибка ввода\n");
             free(result);

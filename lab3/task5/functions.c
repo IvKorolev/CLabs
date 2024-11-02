@@ -8,6 +8,14 @@ const char* get_filename(const char* path) {
     return path;
 }
 
+//const char* get_filename(const char* path){
+//    const char result[PATH_MAX];
+//    if (GetFullPathName(path, PATH_MAX, result, NULL) == 0){
+//        return path;
+//    }
+//    return result;
+//}
+
 enum errors create_list(FILE* input, Student ** result, int* size){
     int capacity = 1;
     *result = (Student*)malloc(sizeof(Student) * capacity);
@@ -58,7 +66,7 @@ void free_student_list(Student* list, int size) {
 }
 
 enum errors search(Student* list, const char* output_filename, char* pod, char flag, int size){
-    FILE* output = fopen(output_filename, "w");
+    FILE* output = fopen(output_filename, "a");
     if (output == NULL) {
         printf("Ошибка открытия выходного файла\n");
         return INVALID_INPUT;
@@ -117,6 +125,7 @@ enum errors search(Student* list, const char* output_filename, char* pod, char f
             }
         }
     }
+    fprintf(output, "\n");
     fclose(output);
     if (found == 0){
         return INVALID_INPUT;
@@ -149,7 +158,7 @@ int compare_by_group(const void* a, const void* b) {
 }
 
 enum errors sort(Student* list, const char* output_filename, char* pod, char flag, int size) {
-    FILE *output = fopen(output_filename, "w");
+    FILE *output = fopen(output_filename, "a");
     if (output == NULL) {
         printf("Ошибка открытия выходного файла\n");
         return INVALID_INPUT;
@@ -174,6 +183,7 @@ enum errors sort(Student* list, const char* output_filename, char* pod, char fla
     for (int i = 0; i < size; i++) {
         fprintf(output, "%d:%s:%s:%s:%s\n", list[i].id, list[i].surname, list[i].name, list[i].group, list[i].grades);
     }
+    fprintf(output, "\n");
     fclose(output);
     return OK;
 }
@@ -195,7 +205,7 @@ float calculate_overall_average(Student* list, int size){
 }
 
 enum errors output_above_average_students(Student* list, int size, const char* output_filename){
-    FILE *output = fopen(output_filename, "w");
+    FILE *output = fopen(output_filename, "a");
     if (output == NULL) {
         printf("Ошибка открытия выходного файла\n");
         return INVALID_INPUT;
@@ -209,6 +219,7 @@ enum errors output_above_average_students(Student* list, int size, const char* o
             fprintf(output, "%d:%s:%s:%s:%.2f\n", list[i].id, list[i].surname, list[i].name, list[i].group, student_average);
         }
     }
+    fprintf(output, "\n");
     fclose(output);
     return OK;
 }
