@@ -53,6 +53,9 @@ enum errors create_post(char* town, char* street, int house_number, char* korpus
 enum errors create_adress(char* town, char* street, int house_number, char* korpus, int apartment, char* index, adress* new_adress);
 enum errors create_mail(adress* adr, double weight, char* post_id, char* time_cr, char* time_d, mail* new_mail);
 enum errors add_mail_to_post(post* post_office, mail new_mail);
+enum errors remove_mail(post* post, const char* post_id);
+enum errors find_mail(post* Post, const char* post_id, mail* res);
+enum errors print_mail(mail* Mail);
 
 
 #endif //CLABS_OPERATIONS_H

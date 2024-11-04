@@ -245,3 +245,64 @@ void print_all_mail(post* p) {
         printf("\n");
     }
 }
+
+enum errors delete_mail(mail* Mail){
+    if (Mail == NULL){
+        return INVALID_INPUT;
+    }
+    delete_str(&Mail->post_id);
+    delete_str(&Mail->time_of_creation);
+    delete_str(&Mail->time_of_delivery);
+    return OK;
+}
+
+enum errors remove_mail(post* Post, const char* post_id){
+    if (Post == NULL){
+        return INVALID_INPUT;
+    }
+    for (int i = 0; i < Post->size; i++){
+        if (strcmp(Post->mass[i].post_id.array, post_id) == 0){
+
+            delete_mail(&Post->mass[i]);
+
+            for (int j = i; j < Post->size - 1; j++){
+                Post->mass[j] = Post->mass[j+1];
+            }
+            Post->size--;
+            mail* new_memory = (mail*)realloc(Post->mass, Post->size * sizeof(mail));
+            if (new_memory == NULL){
+                return INVALID_MEMORY;
+            }
+            Post->mass = new_memory;
+        }
+    }
+    return OK;
+}
+
+enum errors find_mail(post* Post, const char* post_id, mail* res){
+    if (Post == NULL){
+        return INVALID_INPUT;
+    }
+    for (int i = 0; i < Post->size; i++){
+        if (strcmp(Post->mass[i].post_id.array, post_id) == 0){
+            *res = Post->mass[i];
+            return OK;
+        }
+    }
+    return INVALID_INPUT;
+}
+
+enum errors print_mail(mail* Mail){
+    if (Mail == NULL){
+        return INVALID_INPUT;
+    }
+    printf("ID Посылки: %s\n", Mail->post_id.array);
+    printf("Адрес получателя: %s, %s, %d, %s, %d, %s\n", Mail->adr.town.array,
+           Mail->adr.street.array, Mail->adr.house_number, Mail->adr.korpus.array,
+           Mail->adr.apartment, Mail->adr.index.array);
+    printf("Данные посылки:\n");
+    printf("Вес: %.2lf\n", Mail->weight);
+    printf("Время создания %s\n", Mail->time_of_creation.array);
+    printf("Время доставки %s\n", Mail->time_of_delivery.array);
+    return OK;
+}
