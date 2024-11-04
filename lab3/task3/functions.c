@@ -1,12 +1,21 @@
 #include "operations.h"
 
-const char* get_filename(const char* path) {
-    const char* last_slash = strrchr(path, '/');
-    if (last_slash != NULL) {
-        return last_slash + 1;
+int compare_files(const char* path1, const char* path2) {
+    char real_path1[PATH_MAX];
+    char real_path2[PATH_MAX];
+
+    if (realpath(path1, real_path1) == NULL) {
+        perror("Ошибка при получении реального пути для path1");
+        return -1;
     }
-    return path;
-} //realpath переделать для поиска пути до файла
+
+    if (realpath(path2, real_path2) == NULL) {
+        perror("Ошибка при получении реального пути для path2");
+        return -1;
+    }
+
+    return strcmp(real_path1, real_path2) == 0;
+}
 
 enum errors valid_name(char* name){
     for (int i = 0; i < strlen(name); i++){
