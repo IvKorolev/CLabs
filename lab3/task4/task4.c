@@ -8,8 +8,8 @@ int main(int argc, char* argv[]){
     int house_number, apartment;
     double weight;
     char post_id[15];
-    char time_cr[20];
-    char time_d[20];
+    char time_cr[100];
+    char time_d[100];
 
     printf("\nСоздайте почтовое отделение: введите его адрес (город, ул, дом, корпус, номер кв, индекс)\n");
     printf("Введите город: ");
@@ -69,16 +69,18 @@ int main(int argc, char* argv[]){
                 printf("\nТеперь введите данные посылки\n");
                 printf("Введите вес посылки: ");
                 scanf("%lf", &weight);
+
                 printf("Введите почтовый идентификатор (14 символов): ");
                 scanf("%14s", post_id);
-                printf("Введите время создания (строка формата dd:MM:yyyy hh:mm:ss): ");
-                scanf("%19s", time_cr);
-                printf("Введите время вручения (строка формата dd:MM:yyyy hh:mm:ss): ");
-                scanf("%19s", time_d);
-                if(create_mail(&new_adress, weight, post_id, time_cr, time_d, &new_mail) != OK){
-                    printf("Ошибка создания отправления\n");
-                    break;
-                }
+
+                while (getchar() != '\n');
+                printf("Введите время создания (формат dd:MM:yyyy hh:mm:ss): ");
+                fgets(time_cr, sizeof(time_cr), stdin);
+
+                printf("Введите время вручения (формат dd:MM:yyyy hh:mm:ss): ");
+                fgets(time_d, sizeof(time_d), stdin);
+                time_d[strcspn(time_d, "\n")] = '\0';
+
                 if(create_mail(&new_adress, weight, post_id, time_cr, time_d, &new_mail) != OK){
                     printf("Ошибка создания отправления\n");
                     break;

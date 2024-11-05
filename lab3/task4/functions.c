@@ -302,7 +302,7 @@ enum errors print_mail(mail* Mail){
            Mail->adr.apartment, Mail->adr.index.array);
     printf("Данные посылки:\n");
     printf("Вес: %.2lf\n", Mail->weight);
-    printf("Время создания %s\n", Mail->time_of_creation.array);
-    printf("Время доставки %s\n", Mail->time_of_delivery.array);
+    printf("Время создания: %s", Mail->time_of_creation.array);
+    printf("Время вручения: %s\n", Mail->time_of_delivery.array);
     return OK;
 }
