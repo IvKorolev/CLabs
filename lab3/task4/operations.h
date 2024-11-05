@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #define size_t unsigned long long
 
@@ -56,6 +57,8 @@ enum errors add_mail_to_post(post* post_office, mail new_mail);
 enum errors remove_mail(post* post, const char* post_id);
 enum errors find_mail(post* Post, const char* post_id, mail* res);
 enum errors print_mail(mail* Mail);
+enum errors sort(post* Post);
+int is_deliveried(const mail* Mail);
 
 
 #endif //CLABS_OPERATIONS_H

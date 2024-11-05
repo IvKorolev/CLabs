@@ -193,7 +193,6 @@ enum errors create_mail(adress* adr, double weight, char* post_id, char* time_cr
 
     status = create_str(time_cr, &new_mail->time_of_creation);
     if (status != OK) return status;
-
     status = create_str(time_d, &new_mail->time_of_delivery);
     if (status != OK) return status;
 
@@ -215,35 +214,6 @@ enum errors add_mail_to_post(post* post_office, mail new_mail){
     post_office->size = new_size;
 
     return OK;
-}
-
-void print_all_mail(post* p) {
-    if (p == NULL || p->mass == NULL) {
-        printf("Нет доступных данных о посылках.\n");
-        return;
-    }
-
-    if (p->size == 0) {
-        printf("В почтовом отделении нет посылок.\n");
-        return;
-    }
-
-    printf("Список всех посылок:\n");
-    for (int i = 0; i < p->size; i++) {
-        printf("Посылка %d:\n", i + 1);
-        printf("  Почтовый ID: %s\n", p->mass[i].post_id.array);
-        printf("  Время создания: %s\n", p->mass[i].time_of_creation.array);
-        printf("  Время вручения: %s\n", p->mass[i].time_of_delivery.array);
-        printf("  Адрес получателя:\n");
-        printf("    Город: %s\n", p->mass[i].adr.town.array);
-        printf("    Улица: %s\n", p->mass[i].adr.street.array);
-        printf("    Номер дома: %d\n", p->mass[i].adr.house_number);
-        printf("    Корпус: %s\n", p->mass[i].adr.korpus.array);
-        printf("    Номер квартиры: %d\n", p->mass[i].adr.apartment);
-        printf("    Индекс: %s\n", p->mass[i].adr.index.array);
-        printf("  Вес: %.2f\n", p->mass[i].weight);
-        printf("\n");
-    }
 }
 
 enum errors delete_mail(mail* Mail){
@@ -305,4 +275,30 @@ enum errors print_mail(mail* Mail){
     printf("Время создания: %s", Mail->time_of_creation.array);
     printf("Время вручения: %s\n", Mail->time_of_delivery.array);
     return OK;
+}
+
+int compare_by_idx(const void* a, const void* b){
+    mail* Mail1 = (mail*)a;
+    mail* Mail2 = (mail*)b;
+    return strcmp(Mail1->adr.index.array, Mail2->adr.index.array);
+}
+
+int compare_by_post_id(const void* a, const void* b){
+    mail* Mail1 = (mail*)a;
+    mail* Mail2 = (mail*)b;
+    return strcmp(Mail1->post_id.array, Mail2->post_id.array);
+}
+
+enum errors sort(post* Post){
+    qsort(Post->mass, Post->size, sizeof(mail), compare_by_idx);
+    qsort(Post->mass, Post->size, sizeof(mail), compare_by_post_id);
+    return OK;
+}
+
+int is_deliveried(const mail* Mail) {
+    time_t now = time(NULL);
+    struct tm tm;
+    strptime(Mail->time_of_delivery.array, "%d:%m:%Y_%H:%M:%S", &tm);
+    time_t delivery_time = mktime(&tm);
+    return difftime(now, delivery_time) >= 0;
 }

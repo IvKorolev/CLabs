@@ -110,18 +110,40 @@ int main(int argc, char* argv[]){
                 if (status3 != OK){
                     printf("Ошибка поиска посылки\n");
                 }
-                else printf("Посылка найдена:\n");
-                print_mail(&found);
+                else{
+                    printf("Посылка найдена:\n");
+                    print_mail(&found);
+                }
                 break;
 
-//            case 4:
-//                break;
-//
-//            case 5:
-//                break;
-//
-//            case 6:
-//                break;
+            case 4:
+                enum errors status4 = sort(&my_post_office);
+                if (status4 == OK){
+                    printf("Отправления успешно отсортированы\n");
+                }
+                else printf("Произошла ошибка при сортировке\n");
+                for(int i = 0; i < my_post_office.size; i++){
+                    print_mail(&my_post_office.mass[i]);
+                }
+                break;
+
+            case 5:
+                printf("Доставленные посылки\n");
+                for(int i = 0; i < my_post_office.size; i++) {
+                    if (is_deliveried(&my_post_office.mass[i])) {
+                        print_mail(&my_post_office.mass[i]);
+                    }
+                }
+                break;
+
+            case 6:
+                printf("Недоставленные посылки\n");
+                for(int i = 0; i < my_post_office.size; i++) {
+                    if (!is_deliveried(&my_post_office.mass[i])) {
+                        print_mail(&my_post_office.mass[i]);
+                    }
+                }
+                break;
 
             default:
                 printf("Такого флага нет\n");
