@@ -100,6 +100,7 @@ int main(int argc, char* argv[]){
                     printf("Ошибка удаления посылки\n");
                 }
                 else printf("Посылка удалена\n");
+
                 break;
 
             case 3:
