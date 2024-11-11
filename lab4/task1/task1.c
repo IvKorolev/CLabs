@@ -1,4 +1,4 @@
-#include "operations.h" // Предполагается, что все функции находятся в этом заголовочном файле
+#include "operations.h"
 
 int main(int argc, char* argv[]) {
     if (argc < 2) {
@@ -29,10 +29,8 @@ int main(int argc, char* argv[]) {
 
     fclose(input);
 
-    // Печать содержимого хэш-таблицы
     print_table(map);
 
-    // Освобождение памяти
     delete_hash_table(map);
 
     return 0;
