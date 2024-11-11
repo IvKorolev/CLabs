@@ -36,10 +36,11 @@ char* search_item(const hash_table* map, char* key);
 void delete_hash_item(hash_table_item* item);
 void delete_hash_table(hash_table* map);
 void insert_item(hash_table* map, char* key, char* value, int hash);
+void print_table(hash_table* map);
 void calculate_chain_lengths(hash_table* map, int* min_len, int* max_len);
 hash_table* resize_table(hash_table* old_map, int new_size);
 void check_and_resize_table(hash_table** map);
-
+enum errors read_file(FILE* input, hash_table* map);
 
 
 

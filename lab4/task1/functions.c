@@ -214,3 +214,18 @@ void check_and_resize_table(hash_table** map){
         printf("Hash table resized to %d\n", new_size);
     }
 }
+
+enum errors read_file(FILE* input, hash_table* map){
+    char buffer[1024];
+    char key[75];
+    char value[75];
+
+    while (fgets(buffer, sizeof(buffer), input) != NULL){
+        if(strncmp(buffer, "#define ", 8) == 0){
+            if (sscanf(buffer + 8,"%74s %74s", key, value) == 2){
+                insert_item(map, key, value, hash_function(key));
+            }
+        }
+    }
+    return OK;
+}
