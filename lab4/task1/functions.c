@@ -215,16 +215,30 @@ void check_and_resize_table(hash_table** map){
     }
 }
 
-enum errors read_file(FILE* input, hash_table* map){
+enum errors process_file(FILE* input, FILE* output, hash_table* map){
     char buffer[1024];
     char key[75];
     char value[75];
 
-    while (fgets(buffer, sizeof(buffer), input) != NULL){
-        if(strncmp(buffer, "#define ", 8) == 0){
-            if (sscanf(buffer + 8,"%74s %74s", key, value) == 2){
+    while (fgets(buffer, sizeof(buffer), input) != NULL) {
+        if (strncmp(buffer, "#define ", 8) == 0) {
+            if (sscanf(buffer + 8, "%74s %74s", key, value) == 2) {
+                fprintf(output, "%s", buffer);
                 insert_item(map, key, value, hash_function(key));
             }
+        } else {
+            fseek(input, -strlen(buffer), SEEK_CUR);
+            break;
+        }
+    }
+    fprintf(output ,"\n");
+
+    while (fscanf(input, "%1023s", buffer) == 1) {
+        char* mapped_value = search_item(map, buffer);
+        if (mapped_value) {
+            fprintf(output, "%s ", mapped_value);
+        } else {
+            fprintf(output, "%s ", buffer);
         }
     }
     return OK;
