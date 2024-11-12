@@ -6,7 +6,7 @@ hash_table* create_table(int size){
         return NULL;
     }
     map->size = size;
-    map->items = (hash_table_item**)malloc(sizeof(hash_table_item) * size);
+    map->items = (hash_table_item**)malloc(sizeof(hash_table_item*) * size);
     if (map->items == NULL){
         free(map);
         return NULL;
@@ -43,22 +43,14 @@ hash_table_item * create_item(char* key, char* value){
     strcpy(item->key, key);
     item->cached_hash = hash_function(key);
 
-    item->znachenie = (values*)malloc(sizeof(values));
-    if(item->znachenie == NULL){
+    item->znachenie = (char*)malloc(sizeof(char) * (strlen(value) + 1));
+    if (item->znachenie == NULL){
         free(item->key);
         free(item);
         return NULL;
     }
-
-    item->znachenie->value = (char*)malloc(sizeof(char) * (strlen(value) + 1));
-    if (item->znachenie->value == NULL){
-        free(item->key);
-        free(item->znachenie);
-        free(item);
-        return NULL;
-    }
-    strcpy(item->znachenie->value, value);
-    item->znachenie->next = NULL;
+    strcpy(item->znachenie, value);
+    item->next = NULL;
 
     return item;
 }
@@ -66,81 +58,64 @@ hash_table_item * create_item(char* key, char* value){
 char* search_item(const hash_table* map, char* key){
     int index = hash_function(key) % map->size;
     hash_table_item* item = map->items[index];
-    if (item != NULL){
+    while (item != NULL){
         if (strcmp(item->key, key) == 0){
-            return item->znachenie->value;
+            return item->znachenie;
         }
+        item = item->next;
     }
     return NULL;
 }
 
 void delete_hash_item(hash_table_item* item){
-    values* current = item->znachenie;
-    while (current != NULL) {
-        values* next = current->next;
-        free(current->value);
-        free(current);
-        current = next;
-    }
+    free(item->znachenie);
     free(item->key);
     free(item);
 }
 
 void delete_hash_table(hash_table* map){
     for(int i = 0; i < map->size; i++){
-        if (map->items[i] != NULL){
-            delete_hash_item(map->items[i]);
+        hash_table_item* item = map->items[i];
+        while (item != NULL){
+            hash_table_item* next_item = item->next;
+            delete_hash_item(item);
+            item = next_item;
         }
     }
     free(map->items);
     free(map);
 }
 
-void insert_item(hash_table* map, char* key, char* value, int hash){
+void insert_item(hash_table* map, char* key, char* value, int hash) {
     if (map == NULL || key == NULL || value == NULL) {
         return;
     }
 
     int index = hash % map->size;
-    hash_table_item* item = map->items[index];
-
+    hash_table_item* item = create_item(key, value);
     if (item == NULL) {
-        map->items[index] = create_item(key, value);
         return;
     }
 
-    hash_table_item* current = item;
-    while (current != NULL) {
-        if (strcmp(current->key, key) == 0) {
-            values* val_current = current->znachenie;
-            while (val_current->next != NULL) {
-                if (strcmp(val_current->value, value) == 0) {
-                    return;
-                }
-                val_current = val_current->next;
+    if(map->items[index] == NULL){
+        map->items[index] = item;
+    }
+    else{
+        hash_table_item* current = map->items[index];
+        while(current->next != NULL){
+            if(strcmp(current->key, item->key) == 0)
+            {
+                delete_hash_item(item);
+                return;
             }
-
-            if (strcmp(val_current->value, value) != 0) {
-                val_current->next = (values*)malloc(sizeof(values));
-                val_current->next->value = (char*)malloc(sizeof(char) * (strlen(value) + 1));
-                strcpy(val_current->next->value, value);
-                val_current->next->next = NULL;
-            }
+            current = current->next;
+        }
+        if(strcmp(current->key, item->key) == 0)
+        {
+            delete_hash_item(item);
             return;
         }
-        current = NULL;
-    }
-
-    hash_table_item* new_item = create_item(key, value);
-    if (new_item == NULL) {
-        return;
-    }
-
-    if (map->items[index] != NULL) {
-        delete_hash_item(new_item);
-    }
-    else {
-        map->items[index] = new_item;
+        current->next = item;
     }
 }
 
@@ -149,9 +124,9 @@ void print_table(hash_table* map){
     for (int i = 0; i < map->size; i++){
         if (map->items[i] != NULL){
             printf("Values for key %s: ", map->items[i]->key);
-            values* current = map->items[i]->znachenie;
+            hash_table_item* current = map->items[i];
             while (current != NULL) {
-                printf("%s ", current->value);
+                printf("%s ", current->znachenie);
                 current = current->next;
             }
             printf("\n");
@@ -159,49 +134,50 @@ void print_table(hash_table* map){
     }
 }
 
-void calculate_chain_lengths(hash_table* map, int* min_len, int* max_len){
+void calculate_chain_lengths(hash_table* map, int* min_len, int* max_len) {
     *min_len = map->size;
     *max_len = 0;
 
-    for (int i = 0; i < map->size; i++){
+    for (int i = 0; i < map->size; i++) {
         int chain_len = 0;
         hash_table_item* item = map->items[i];
 
-        while (item->znachenie != NULL){
+        while (item != NULL) {
             chain_len++;
-            item->znachenie = item->znachenie->next;
+            printf("Current chain length at index %d: %d\n", i, chain_len);  // Отладка
+            item = item->next;
         }
 
-        if (chain_len > 0 && chain_len < *min_len){
+        if (chain_len > 0 && chain_len < *min_len) {
             *min_len = chain_len;
         }
-        if (chain_len > *max_len){
+        if (chain_len > *max_len) {
             *max_len = chain_len;
         }
     }
 }
 
-hash_table* resize_table(hash_table* old_map, int new_size){
-    hash_table* new_map = create_table(new_size);
-    if (new_map == NULL){
-        return NULL;
-    }
+void* resize_table(hash_table* old_map, int new_size) {
+    hash_table_item** old = old_map->items;
+    int old_size = old_map->size;
+    old_map->size = new_size;
+    old_map->items = (hash_table_item**)calloc(new_size, sizeof(hash_table_item*));
 
-    for (int i = 0; i < old_map->size; i++){
-        hash_table_item* item = old_map->items[i];
+    for (int i = 0; i < old_size; i++) {
+        hash_table_item* item = old[i];
 
-        while (item != NULL){
-            values* current_value = item->znachenie;
-            while (current_value != NULL){
-                insert_item(new_map, item->key, current_value->value, item->cached_hash);
-                current_value = current_value->next;
-            }
-            item = NULL;
+        while (item != NULL) {
+            printf("Resizing item with key: %s\n", item->key);
+            printf(" - Copying value: %s\n", item->znachenie);
+            insert_item(old_map, item->key, item->znachenie, item->cached_hash);
+            hash_table_item* old_item = item;
+            item = item->next;
+            delete_hash_item(old_item);
         }
     }
 
-    delete_hash_table(old_map);
-    return new_map;
+    free(old);
+    return NULL;
 }
 
 void check_and_resize_table(hash_table** map){
@@ -210,7 +186,7 @@ void check_and_resize_table(hash_table** map){
 
     if (max_len >= 2 * min_len){
         int new_size = (*map)->size * 2;
-        *map = resize_table(*map, new_size);
+        resize_table(*map, new_size);
         printf("Hash table resized to %d\n", new_size);
     }
 }
@@ -231,15 +207,22 @@ enum errors process_file(FILE* input, FILE* output, hash_table* map){
             break;
         }
     }
-    fprintf(output ,"\n");
+    while (fgets(buffer, sizeof(buffer), input) != NULL) {
+        char* token = strtok(buffer, " \n");
+        int first_word = 1;
 
-    while (fscanf(input, "%1023s", buffer) == 1) {
-        char* mapped_value = search_item(map, buffer);
-        if (mapped_value) {
-            fprintf(output, "%s ", mapped_value);
-        } else {
-            fprintf(output, "%s ", buffer);
+        while (token != NULL) {
+            char* mapped_value = search_item(map, token);
+            if (first_word) {
+                fprintf(output, "%s", mapped_value ? mapped_value : token);
+                first_word = 0;
+            }
+            else{
+                fprintf(output, " %s", mapped_value ? mapped_value : token);
+            }
+            token = strtok(NULL, " \n");
         }
+        fprintf(output, "\n");
     }
     return OK;
 }

@@ -13,15 +13,11 @@ enum errors{
     OK,
 };
 
-typedef struct values{
-    char* value;
-    struct values* next;
-}values;
-
 typedef struct hash_table_item{
     char* key;
-    values* znachenie;
+    char* znachenie;
     int cached_hash;
+    struct hash_table_item* next;
 }hash_table_item;
 
 typedef struct hash_table{
@@ -38,7 +34,7 @@ void delete_hash_table(hash_table* map);
 void insert_item(hash_table* map, char* key, char* value, int hash);
 void print_table(hash_table* map);
 void calculate_chain_lengths(hash_table* map, int* min_len, int* max_len);
-hash_table* resize_table(hash_table* old_map, int new_size);
+void* resize_table(hash_table* old_map, int new_size);
 void check_and_resize_table(hash_table** map);
 enum errors process_file(FILE* input, FILE* output, hash_table* map);
 

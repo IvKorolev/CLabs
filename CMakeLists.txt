@@ -68,3 +68,7 @@ add_executable(Task7 lab1/task7/task7.c)
 add_executable(Task3 lab1/task3/task3.c)
 
 add_executable(Task5 lab3/task5/task5.c)
+
+add_executable(Task1 lab4/task1/task1.c
+                    lab4/task1/functions.c
+                    lab4/task1/operations.h)

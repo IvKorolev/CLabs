@@ -8,33 +8,42 @@ int main(int argc, char* argv[]) {
 
     FILE* input = fopen(argv[1], "r");
     if (input == NULL) {
-        printf("Error opening file");
+        fprintf(stderr, "Error opening input file\n");
         return INVALID_INPUT;
     }
 
     FILE* output = fopen("output.txt", "w");
     if (output == NULL) {
-        printf("Error opening file");
+        fprintf(stderr, "Error opening output file\n");
+        fclose(input);
         return INVALID_INPUT;
     }
 
-    int initial_size = 10;
+    int initial_size = 128;
     hash_table* map = create_table(initial_size);
     if (map == NULL) {
         fprintf(stderr, "Error creating hash table\n");
         fclose(input);
+        fclose(output);
         return 1;
     }
 
     if (process_file(input, output, map) != OK) {
-        fprintf(stderr, "Error reading file into hash table\n");
+        fprintf(stderr, "Error processing file\n");
         delete_hash_table(map);
         fclose(input);
+        fclose(output);
         return 1;
     }
 
     fclose(input);
+    fclose(output);
 
+    print_table(map);
+
+    check_and_resize_table(&map);
+
+    printf("\nAfter resizing (if applicable):\n");
     print_table(map);
 
     delete_hash_table(map);
