@@ -61,6 +61,9 @@ add_executable(CLabs
         lab4/task1/task1.c
         lab4/task1/functions.c
         lab4/task1/operations.h
+        lab4/task7/task7.c
+        lab4/task7/functions.c
+        lab4/task7/operations.h
 )
 
 add_executable(Task7 lab1/task7/task7.c)
@@ -72,3 +75,7 @@ add_executable(Task5 lab3/task5/task5.c)
 add_executable(Task1 lab4/task1/task1.c
                     lab4/task1/functions.c
                     lab4/task1/operations.h)
+
+add_executable(Task74 lab4/task7/task7.c
+                lab4/task7/functions.c
+                lab4/task7/operations.h)
