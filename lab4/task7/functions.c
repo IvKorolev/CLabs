@@ -93,6 +93,7 @@ enum errors search_value(MemoryCell** res, char* argument, int size, long int* r
             left = mid + 1;
         }
     }
+    //фришить память
     return NOT_DECLARED;
 }
 
