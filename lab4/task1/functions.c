@@ -197,23 +197,24 @@ enum errors process_file(FILE* input, FILE* output, hash_table* map){
     char value[75];
 
     while (fgets(buffer, sizeof(buffer), input) != NULL) {
-        if (strncmp(buffer, "#define ", 8) == 0) {
-            if (sscanf(buffer + 8, "%74s %74s", key, value) == 2) {
+        if (strncmp(buffer, "#define ", 8) == 0){
+            if (sscanf(buffer + 8, "%74s %74s", key, value) == 2){
                 fprintf(output, "%s", buffer);
                 insert_item(map, key, value, hash_function(key));
             }
-        } else {
+        }
+        else{
             fseek(input, -strlen(buffer), SEEK_CUR);
             break;
         }
     }
-    while (fgets(buffer, sizeof(buffer), input) != NULL) {
+    while (fgets(buffer, sizeof(buffer), input) != NULL){
         char* token = strtok(buffer, " \n");
         int first_word = 1;
 
-        while (token != NULL) {
+        while (token != NULL){
             char* mapped_value = search_item(map, token);
-            if (first_word) {
+            if (first_word){
                 fprintf(output, "%s", mapped_value ? mapped_value : token);
                 first_word = 0;
             }
