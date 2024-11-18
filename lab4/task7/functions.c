@@ -14,15 +14,15 @@ enum errors str_to_int(const char* x, long int* res){
 }
 
 int compare(const void* a, const void* b){
-    MemoryCell* mc1 = *(MemoryCell**)a;
-    MemoryCell* mc2 = *(MemoryCell**)b;
+    MemoryCell* mc1 = (MemoryCell*)a;
+    MemoryCell* mc2 = (MemoryCell*)b;
     return strcmp(mc1->name, mc2->name);
 }
 
-enum errors check_if_print(const char* buffer, MemoryCell** res, int size){
+enum errors check_if_print(const char* buffer, MemoryCell* res, int size){
     if (strncmp(buffer, "print", 5) == 0 && strlen(buffer) == 6){
         for (int i = 0; i < size; i++){
-            printf("%s: %d\n", res[i]->name, res[i]->value);
+            printf("%s: %d\n", res[i].name, res[i].value);
         }
         printf("\n");
         return OK;
@@ -32,8 +32,8 @@ enum errors check_if_print(const char* buffer, MemoryCell** res, int size){
         sscanf(buffer + 6, "%99s", output);
         output[strlen(output) - 1] = '\0';
         for (int i = 0; i < size; i++){
-            if (strcmp(output, res[i]->name) == 0){
-                printf("%d\n", res[i]->value);
+            if (strcmp(output, res[i].name) == 0){
+                printf("%d\n", res[i].value);
             }
         }
         return OK;
@@ -43,14 +43,14 @@ enum errors check_if_print(const char* buffer, MemoryCell** res, int size){
     }
 }
 
-enum errors search_value(MemoryCell** res, char* argument, int size, long int* resultation){
+enum errors search_value(MemoryCell* res, char* argument, int size, long int* resultation){
     int left = 0;
     int right = size - 1;
     while (left <= right){
         int mid = left + (right - left) / 2;
-        int result = strcmp(argument, res[mid]->name);
+        int result = strcmp(argument, res[mid].name);
         if (result == 0){
-            *resultation = res[mid]->value;
+            *resultation = res[mid].value;
             return OK;
         }
         if (result < 0){
@@ -63,14 +63,14 @@ enum errors search_value(MemoryCell** res, char* argument, int size, long int* r
     return NOT_DECLARED;
 }
 
-enum errors search_value_to_new(MemoryCell** res, char* argument, int size, long int* resultation){
+enum errors search_value_to_new(MemoryCell* res, char* argument, int size, long int* resultation){
     int left = 0;
     int right = size - 1;
     while (left <= right){
         int mid = left + (right - left) / 2;
-        int result = strcmp(argument, res[mid]->name);
+        int result = strcmp(argument, res[mid].name);
         if (result == 0){
-            res[mid]->value = *resultation;
+            res[mid].value = *resultation;
             return OK;
         }
         if (result < 0){
@@ -83,37 +83,30 @@ enum errors search_value_to_new(MemoryCell** res, char* argument, int size, long
     return NOT_FOUND;
 }
 
-enum errors add_Cell(MemoryCell*** res, char* first_argument, long int num, int* size, int* capacity){
+enum errors add_Cell(MemoryCell** res, char* first_argument, long int num, int* size, int* capacity) {
     if (search_value_to_new(*res, first_argument, *size, &num) == OK){
         free(first_argument);
         return OK;
     }
 
-    if (*size == *capacity){
+    if (*size == *capacity) {
         *capacity *= 2;
-        MemoryCell** new_memory = realloc(*res, sizeof(MemoryCell*) * (*capacity));
-        if (new_memory == NULL){
+        MemoryCell* new_memory = realloc(*res, sizeof(MemoryCell) * (*capacity));
+        if (new_memory == NULL) {
             free(first_argument);
             return INVALID_MEMORY;
         }
         *res = new_memory;
     }
 
-    MemoryCell* cell = malloc(sizeof(MemoryCell));
-    if (cell == NULL){
-        free(first_argument);
-        return INVALID_MEMORY;
-    }
-    cell->name = first_argument;
-    cell->value = num;
-
-    (*res)[*size] = cell;
+    (*res)[*size].name = first_argument;
+    (*res)[*size].value = num;
     (*size)++;
-    qsort(*res, *size, sizeof(MemoryCell*), compare);
+    qsort(*res, *size, sizeof(MemoryCell), compare);
     return OK;
 }
 
-enum errors process_line(char* buffer, MemoryCell*** res, int* size, int* capacity){
+enum errors process_line(char* buffer, MemoryCell* res, int* size, int* capacity){
     char operation;
     char* first_argument = NULL;
     char* after_eq = NULL;
@@ -168,19 +161,19 @@ enum errors process_line(char* buffer, MemoryCell*** res, int* size, int* capaci
                 free(second_argument);
                 return INVALID_INPUT;
             }
-            enum errors status_add = add_Cell(res, first_argument, num, size, capacity);
+            enum errors status_add = add_Cell(&res, first_argument, num, size, capacity);
             if (status_add != OK) return INVALID_MEMORY;
         }
         else{
             long int found;
-            enum errors status_found = search_value(*res, second_argument, *size, &found);
+            enum errors status_found = search_value(res, second_argument, *size, &found);
             if (status_found != OK){
                 free(first_argument);
                 free(second_argument);
                 free(after_eq);
                 return NOT_DECLARED;
             }
-            enum errors status_add = add_Cell(res, first_argument, found, size, capacity);
+            enum errors status_add = add_Cell(&res, first_argument, found, size, capacity);
             if (status_add != OK) return INVALID_MEMORY;
         }
     }
@@ -192,7 +185,7 @@ enum errors process_line(char* buffer, MemoryCell*** res, int* size, int* capaci
             status = str_to_int(second_argument, &first_to_op);
         }
         else{
-            status = search_value(*res, second_argument, *size, &first_to_op);
+            status = search_value(res, second_argument, *size, &first_to_op);
         }
         if (status != OK) {
             free(first_argument);
@@ -206,7 +199,7 @@ enum errors process_line(char* buffer, MemoryCell*** res, int* size, int* capaci
             status = str_to_int(third_argument, &second_to_op);
         }
         else{
-            status = search_value(*res, third_argument, *size, &second_to_op);
+            status = search_value(res, third_argument, *size, &second_to_op);
         }
         if (status != OK) {
             free(first_argument);
@@ -234,7 +227,7 @@ enum errors process_line(char* buffer, MemoryCell*** res, int* size, int* capaci
                 resultat = second_to_op ? first_to_op % second_to_op : 0;
                 break;
         }
-        enum errors status_add = add_Cell(res, first_argument, resultat, size, capacity);
+        enum errors status_add = add_Cell(&res, first_argument, resultat, size, capacity);
         if (status_add != OK) return INVALID_MEMORY;
     }
 
@@ -246,30 +239,30 @@ enum errors process_line(char* buffer, MemoryCell*** res, int* size, int* capaci
     return OK;
 }
 
-enum errors process_file(FILE* input, MemoryCell*** res){
+enum errors process_file(FILE* input, MemoryCell** res) {
     int capacity = 100;
-    *res = malloc(sizeof(MemoryCell*) * capacity);
-    if (*res == NULL){
+    int size = 0;
+    *res = malloc(sizeof(MemoryCell) * capacity);
+    if (*res == NULL) {
         return INVALID_MEMORY;
     }
+
     char buffer[1024];
-    int size = 0;
-    while (fgets(buffer, 1023, input) != NULL){
+    while (fgets(buffer, 1023, input) != NULL) {
         if (check_if_print(buffer, *res, size) == OK) continue;
-        enum errors status_line = process_line(buffer, res, &size, &capacity);
-        if (status_line == NOT_DECLARED) {
-            for (int i = 0; i < size; i++){
-                free((*res)[i]->name);
-                free((*res)[i]);
+
+        enum errors status_line = process_line(buffer, *res, &size, &capacity);
+        if (status_line != OK) {
+            for (int i = 0; i < size; i++) {
+                free((*res)[i].name);
             }
             free(*res);
-            return NOT_DECLARED;
+            return status_line;
         }
     }
 
-    for (int i = 0; i < size; i++){
-        free((*res)[i]->name);
-        free((*res)[i]);
+    for (int i = 0; i < size; i++) {
+        free((*res)[i].name);
     }
     free(*res);
     return OK;

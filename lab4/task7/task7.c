@@ -6,7 +6,7 @@ int main(int argc, char* argv[]){
         return INVALID_INPUT;
     }
 
-    MemoryCell** Allcells = NULL;
+    MemoryCell* Allcells = NULL;
     FILE* input = fopen(argv[1], "r");
     if (input == NULL) {
         printf("Ошибка открытия файла\n");
@@ -18,6 +18,5 @@ int main(int argc, char* argv[]){
     if (result != OK){
         printf("Ошибка обработки файла\n");
     }
-
     return 0;
 }
