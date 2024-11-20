@@ -87,3 +87,5 @@ project(CLabs CXX)
 set(CMAKE_CXX_STANDARD 20)
 
 add_executable(Clabs1 lab5/task1/task1.cpp)
+
+add_executable(Clabs2 lab5/task2/task2.cpp)

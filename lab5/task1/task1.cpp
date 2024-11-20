@@ -1,8 +1,6 @@
 #include <iostream>
 #include <utility>
 
-using namespace std;
-
 class binary_int {
 private:
     int value;
@@ -124,7 +122,7 @@ public:
         return binary_int(value >> shift);
     }
 
-    pair<binary_int, binary_int> split() const{
+    std::pair<binary_int, binary_int> split() const{
         int upper = value & 0xFFFF0000;
         int lower = value & 0x0000FFFF;
         return {binary_int(upper), binary_int(lower)};
@@ -132,12 +130,12 @@ public:
 
     void print_binary() const{
         for (int i = 31; i >= 0; --i){
-            cout << ((value >> i) & 1);
-            if (i % 8 == 0) cout << " ";
+            std::cout << ((value >> i) & 1);
+            if (i % 8 == 0) std::cout << " ";
         }
     }
 
-    friend ostream& operator<<(ostream& os, const binary_int& b){
+    friend std::ostream& operator<<(std::ostream& os, const binary_int& b){
         b.print_binary();
         return os;
     }
@@ -147,51 +145,51 @@ int main(){
     binary_int a(42);
     binary_int b(-15);
 
-    cout << "Binary representation of a:\n";
-    cout << a << "\n";
+    std::cout << "Binary representation of a:\n";
+    std::cout << a << "\n";
 
-    cout << "Binary representation of -a:\n";
-    cout << -a << "\n";
+    std::cout << "Binary representation of -a:\n";
+    std::cout << -a << "\n";
 
-    cout << "Prefix increment (++a):\n";
-    cout << ++a << "\n";
-    cout << "Postfix increment (a++):\n";
-    cout << a++ << "\n";
-    cout << "After postfix increment:\n";
-    cout << a << "\n";
+    std::cout << "Prefix increment (++a):\n";
+    std::cout << ++a << "\n";
+    std::cout << "Postfix increment (a++):\n";
+    std::cout << a++ << "\n";
+    std::cout << "After postfix increment:\n";
+    std::cout << a << "\n";
 
-    cout << "\na + b:\n" << a + b << "\n";
-    cout << "a * b:\n" << a * b << "\n";
-    cout << "a - b:\n" << a - b << "\n";
-    cout << "a:\n" << a << "\n";
+    std::cout << "\na + b:\n" << a + b << "\n";
+    std::cout << "a * b:\n" << a * b << "\n";
+    std::cout << "a - b:\n" << a - b << "\n";
+    std::cout << "a:\n" << a << "\n";
 
-    cout << "\na += b:\n";
+    std::cout << "\na += b:\n";
     a += b;
-    cout << a << "\n";
-    cout << "a -= b:\n";
+    std::cout << a << "\n";
+    std::cout << "a -= b:\n";
     a -= b;
-    cout << a << "\n";
-    cout << "a *= b:\n";
+    std::cout << a << "\n";
+    std::cout << "a *= b:\n";
     a *= b;
-    cout << a << "\n";
+    std::cout << a << "\n";
 
-    cout << "\na <<= 2:\n";
+    std::cout << "\na <<= 2:\n";
     a <<= 2;
-    cout << a << "\n";
-    cout << "a << 2:\n" << (a << 2) << "\n";
-    cout << "a:\n" << a << "\n";
+    std::cout << a << "\n";
+    std::cout << "a << 2:\n" << (a << 2) << "\n";
+    std::cout << "a:\n" << a << "\n";
 
-    cout << "\na >>= 2:\n";
+    std::cout << "\na >>= 2:\n";
     a >>= 2;
-    cout << a << "\n";
-    cout << "a >> 2:\n" << (a >> 2) << "\n";
-    cout << "a:\n" << a << "\n";
+    std::cout << a << "\n";
+    std::cout << "a >> 2:\n" << (a >> 2) << "\n";
+    std::cout << "a:\n" << a << "\n";
 
 
-    cout << "\nSplitting a into upper and lower halves:\n";
+    std::cout << "\nSplitting a into upper and lower halves:\n";
     auto [upper, lower] = a.split();
-    cout << "Upper half:" << "\n" << upper << "\n";
-    cout << "Lower half:" << "\n" << lower << "\n";
+    std::cout << "Upper half:" << "\n" << upper << "\n";
+    std::cout << "Lower half:" << "\n" << lower << "\n";
 
     return 0;
 }
