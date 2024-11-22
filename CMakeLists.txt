@@ -66,6 +66,7 @@ add_executable(CLabs
         lab4/task7/operations.h
         lab5/task1/task1.cpp
         lab5/task3/task3.cpp
+        lab5/task4/task4.cpp
 )
 
 add_executable(Task7 lab1/task7/task7.c)
@@ -90,3 +91,4 @@ set(CMAKE_CXX_STANDARD 20)
 add_executable(Clabs1 lab5/task1/task1.cpp)
 add_executable(Clabs2 lab5/task2/task2.cpp)
 add_executable(Clabs3 lab5/task3/task3.cpp)
+add_executable(Clabs4 lab5/task4/task4.cpp)
