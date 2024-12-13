@@ -4,6 +4,7 @@
 #include <string>
 #include <stdexcept>
 #include <iterator>
+#include <filesystem>
 
 class encoder{
 private:
@@ -51,6 +52,15 @@ public:
     }
 
     void encode(const std::string& input_path, const std::string& output_path){
+
+        std::filesystem::path path_1{input_path};
+        std::filesystem::path path_2{output_path};
+
+        if (std::filesystem::equivalent(path_1, path_2))
+        {
+            throw std::runtime_error("Equivalent file path");
+        }
+
         std::ifstream input_file(input_path, std::ios::binary);
         if (!input_file.is_open()){
             throw std::runtime_error("Failed to open input file: " + input_path);
