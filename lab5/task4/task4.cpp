@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cmath>
 
-class complex{
+class complex final{
 private:
     double deistv;
     double mnim;
@@ -9,24 +9,24 @@ private:
 public:
     complex(double a = 0, double b = 0) {deistv = a; mnim = b;}
 
-    void sum(complex& other){
+    void sum(const complex& other){
         deistv += other.deistv;
         mnim += other.mnim;
     }
 
-    void substraction(complex& other){
+    void substraction(const complex& other){
         complex result;
         deistv -= other.deistv;
         mnim -= other.mnim;
     }
 
-    void multiply(complex& other){
+    void multiply(const complex& other){
         complex result;
         deistv = deistv * other.deistv - mnim * other.mnim;
         mnim = deistv * other.mnim + mnim * other.deistv;
     }
 
-    void devision(complex& other){
+    void devision(const complex& other){
         complex result;
         double divider = (other.deistv * other.deistv + other.mnim * other.mnim);
         if (divider == 0)
@@ -70,9 +70,10 @@ int main(){
         std::cout << e.what() << std::endl;
     }
 
+    std::cout << "a = ";
     a.info();
     b = complex(1.22, 1421.22);
-    std::cout << "new b = ";
+    std::cout << "b = ";
     b.info();
 
     try

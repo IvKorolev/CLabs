@@ -3,7 +3,7 @@
 #include <string>
 
 
-class logical_values_array{
+class logical_values_array final{
 private:
     unsigned int value;
 
@@ -14,29 +14,29 @@ public:
         return value;
     }
 
-    logical_values_array inversion(){
+    logical_values_array inversion() const{
         return logical_values_array(~(value));
     }
 
-    logical_values_array conjuction(logical_values_array& value2){
+    logical_values_array conjuction(const logical_values_array& value2) const{
         return logical_values_array(value && value2.get_value());
     }
 
-    logical_values_array disjunction(logical_values_array& value2){
+    logical_values_array disjunction(const logical_values_array& value2) const{
         logical_values_array temp = value2.inversion();
         logical_values_array temp2 = this->inversion();
         return temp2.conjuction(temp).inversion();
     }
 
-    logical_values_array implication(logical_values_array& value2){
+    logical_values_array implication(const logical_values_array& value2) const{
         return this->inversion().disjunction(value2);
     }
 
-    logical_values_array coimplication(logical_values_array& value2){
+    logical_values_array coimplication(const logical_values_array& value2) const{
         return this->inversion().implication(value2);
     }
 
-    logical_values_array mod2(logical_values_array& value2){
+    logical_values_array mod2(const logical_values_array& value2) const{
         logical_values_array temp1, temp2, temp3;
         temp1 = this->inversion().conjuction(value2);
         temp3 = value2.inversion();
@@ -44,32 +44,30 @@ public:
         return temp1.disjunction(temp2);
     }
 
-    logical_values_array equivalence(logical_values_array& value2){
+    logical_values_array equivalence(const logical_values_array& value2) const{
         return this->mod2(value2).inversion();
     }
 
-    logical_values_array Pirs(logical_values_array& value2){
+    logical_values_array Pirs(const logical_values_array& value2) const{
         return this->disjunction(value2).inversion();
     }
 
-    logical_values_array Sheffer(logical_values_array& value2){
+    logical_values_array Sheffer(const logical_values_array& value2) const{
         return this->conjuction(value2).inversion();
     }
 
-    static bool equals(logical_values_array &value1, logical_values_array &value2){
+    static bool equals(const logical_values_array &value1, const logical_values_array &value2){
         return value1.get_value() == value2.get_value();
     }
 
-    bool get_bit(size_t position) const
-    {
+    bool get_bit(size_t position) const {
         if (position >= sizeof(value) * 8)
             throw "Incorrect position";
 
         return (1ul << position) & value;
     }
 
-    void get_str_value(char *str_value)
-    {
+    void get_str_value(char *str_value) const{
         if (!str_value)
             throw "Null string";
 

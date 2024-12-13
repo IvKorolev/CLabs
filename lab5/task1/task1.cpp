@@ -1,7 +1,7 @@
 #include <iostream>
 #include <utility>
 
-class binary_int {
+class binary_int final{
 private:
     int value;
 

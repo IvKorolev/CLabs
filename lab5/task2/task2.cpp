@@ -6,7 +6,7 @@
 #include <iterator>
 #include <filesystem>
 
-class encoder{
+class encoder final{
 private:
     std::vector<std::byte> key;
     std::vector<int> s;
