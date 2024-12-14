@@ -69,7 +69,7 @@ public:
         std::vector<char> temp_data(
                 (std::istreambuf_iterator<char>(input_file)),
                 std::istreambuf_iterator<char>()
-        );
+        ); //считывать весь файл оч плохо, надо делать посимвольно
 
         std::vector<std::byte> input_data;
         for(char c : temp_data){

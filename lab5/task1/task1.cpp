@@ -185,7 +185,6 @@ int main(){
     std::cout << "a >> 2:\n" << (a >> 2) << "\n";
     std::cout << "a:\n" << a << "\n";
 
-
     std::cout << "\nSplitting a into upper and lower halves:\n";
     auto [upper, lower] = a.split();
     std::cout << "Upper half:" << "\n" << upper << "\n";

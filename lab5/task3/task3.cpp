@@ -24,7 +24,7 @@ public:
 
     logical_values_array disjunction(const logical_values_array& value2) const{
         logical_values_array temp = value2.inversion();
-        logical_values_array temp2 = this->inversion();
+        logical_values_array temp2 = inversion();
         return temp2.conjuction(temp).inversion();
     }
 
@@ -62,14 +62,14 @@ public:
 
     bool get_bit(size_t position) const {
         if (position >= sizeof(value) * 8)
-            throw "Incorrect position";
+            throw std::runtime_error("Incorrect position");
 
         return (1ul << position) & value;
     }
 
     void get_str_value(char *str_value) const{
         if (!str_value)
-            throw "Null string";
+            throw std::runtime_error("Null string");
 
         short count_bits = sizeof(value) * 8;
 

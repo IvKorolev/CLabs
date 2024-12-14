@@ -144,7 +144,7 @@ public:
         return arr[size - 1];
     }
 
-    double const &back() const{
+    double const &back() const{ //небезопасные методы сделать безопасными
         if (size == 0)
             throw std::range_error("Out of range");
 
@@ -259,7 +259,7 @@ public:
         if (size < v.size)
             return -1;
         return 0;
-    }
+    } //ordering type должен вернуть ()
 
     vector &operator=(vector const &v){
         if (this != &v)
