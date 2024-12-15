@@ -3,6 +3,7 @@
 #include <vector>
 #include <iterator>
 #include <initializer_list>
+#include <compare>
 
 class vector final
 {
@@ -257,22 +258,35 @@ public:
         return true;
     }
 
-    int operator<=>(vector const &v) const{
-        for (size_t i = 0; i < size && i < v.size; ++i)
-        {
-            if (arr[i] - v.arr[i] < -__DBL_EPSILON__)
-                return -1;
-            if (arr[i] - v.arr[i] > __DBL_EPSILON__)
-                return 1;
-        }
-        if (size > v.size)
-        {
-            return 1;
+//    int operator<=>(vector const &v) const{
+//        for (size_t i = 0; i < size && i < v.size; ++i)
+//        {
+//            if (arr[i] - v.arr[i] < -__DBL_EPSILON__)
+//                return -1;
+//            if (arr[i] - v.arr[i] > __DBL_EPSILON__)
+//                return 1;
+//        }
+//        if (size > v.size)
+//        {
+//            return 1;
+//        }
+//        if (size < v.size)
+//            return -1;
+//        return 0;
+//    } //ordering type должен вернуть ()
+    std::strong_ordering operator<=>(vector const &v) const {
+        for (size_t i = 0; i < size && i < v.size; ++i) {
+            if (arr[i] < v.arr[i])
+                return std::strong_ordering::less;
+            if (arr[i] > v.arr[i])
+                return std::strong_ordering::greater;
         }
         if (size < v.size)
-            return -1;
-        return 0;
-    } //ordering type должен вернуть ()
+            return std::strong_ordering::less;
+        if (size > v.size)
+            return std::strong_ordering::greater;
+        return std::strong_ordering::equal;
+    }
 
     vector &operator=(vector const &v)& {
         if (this != &v)
@@ -296,6 +310,17 @@ public:
         delete[] arr;
     }
 };
+
+template <typename Ordering>
+std::string compare_to_string(Ordering ordering) {
+    if (ordering == 0)
+        return "equal";
+    else if (ordering < 0)
+        return "less";
+    else
+        return "greater";
+}
+
 
 void test_vector() {
     // Тестирование конструктора с количеством элементов
@@ -367,8 +392,9 @@ void test_vector() {
 
     // Тестирование оператора сравнения
     vector v3{1.5, 3.3, 4.5};
+    auto result =(v1 <=> v3);
     std::cout << "v1 == v3: " << (v1 == v3) << "\n";
-    std::cout << "v1 <=> v3: " << (v1 <=> v3) << "\n";
+    std::cout << "v1 <=> v3: " << compare_to_string(result) << "\n";
 
     // Тестирование оператора присваивания
     vector v4 = v2;
@@ -391,6 +417,7 @@ void test_vector() {
 }
 
 int main() {
+
     try {
         test_vector();
     } catch (const std::exception &e) {
