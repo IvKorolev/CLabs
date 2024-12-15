@@ -66,10 +66,11 @@ public:
             throw std::runtime_error("Failed to open input file: " + input_path);
         }
 
-        std::vector<char> temp_data(
-                (std::istreambuf_iterator<char>(input_file)),
-                std::istreambuf_iterator<char>()
-        ); //считывать весь файл оч плохо, надо делать посимвольно
+        std::vector<char> temp_data;
+        char ch;
+        while (input_file.get(ch)) {
+            temp_data.push_back(ch);
+        }
 
         std::vector<std::byte> input_data;
         for(char c : temp_data){
