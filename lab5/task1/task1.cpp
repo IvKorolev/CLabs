@@ -55,8 +55,13 @@ public:
         return negative(value);
     }
 
-    binary_int& operator++(){
+    binary_int& operator++()& {
         value = sum(value, 1);
+        return *this;
+    }
+
+    binary_int& operator--()& {
+        value = subtraction(value, 1);
         return *this;
     }
 
@@ -66,19 +71,19 @@ public:
         return temp;
     }
 
-    binary_int& operator--(){
-        value = subtraction(value, 1);
-        return *this;
-    }
-
     binary_int operator--(int){
         binary_int temp = *this;
         value = subtraction(value, 1);
         return temp;
     }
 
-    binary_int& operator+=(const binary_int& other){
+    binary_int& operator+=(const binary_int& other)& {
         value = sum(value, other.value);
+        return *this;
+    }
+
+    binary_int& operator-=(const binary_int& other)& {
+        value = subtraction(value, other.value);
         return *this;
     }
 
@@ -86,16 +91,11 @@ public:
         return binary_int(sum(value, other.value));
     }
 
-    binary_int& operator-=(const binary_int& other){
-        value = subtraction(value, other.value);
-        return *this;
-    }
-
     binary_int operator-(const binary_int& other) const{
         return binary_int(subtraction(value, other.value));
     }
 
-    binary_int& operator*=(const binary_int& other){
+    binary_int& operator*=(const binary_int& other)& {
         value = multiply(value, other.value);
         return *this;
     }
@@ -104,7 +104,7 @@ public:
         return binary_int(multiply(value, other.value));
     }
 
-    binary_int& operator<<=(int shift){
+    binary_int& operator<<=(int shift)& {
         value <<= shift;
         return *this;
     }
@@ -113,7 +113,7 @@ public:
         return binary_int(value << shift);
     }
 
-    binary_int& operator>>=(int shift){
+    binary_int& operator>>=(int shift)& {
         value >>= shift;
         return *this;
     }

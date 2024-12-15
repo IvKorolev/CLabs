@@ -31,7 +31,7 @@ public:
         double const &operator*() const { return *_ptr; }
         double &operator*() { return *_ptr; }
 
-        iterator &operator++(){
+        iterator& operator++()& {
             _ptr++;
             return *this;
         }
@@ -42,7 +42,7 @@ public:
             return tmp;
         }
 
-        iterator &operator--(){
+        iterator& operator--()& {
             _ptr--;
             return *this;
         }
@@ -53,24 +53,37 @@ public:
             return tmp;
         }
 
-        iterator operator+(size_t shift) const { return iterator(_ptr + shift); }
-        iterator &operator+=(size_t shift){
+        iterator operator+(size_t shift) const {
+            return iterator(_ptr + shift);
+        }
+
+        iterator& operator+=(size_t shift)& {
             _ptr += shift;
             return *this;
         }
 
-        iterator operator-(size_t shift) const { return iterator(_ptr - shift); }
-        iterator &operator-=(size_t shift){
+        iterator operator-(size_t shift) const {
+            return iterator(_ptr - shift);
+        }
+
+        iterator& operator-=(size_t shift)& {
             _ptr -= shift;
             return *this;
         }
 
-        double *operator->() { return _ptr; }
-        double const *operator->() const { return _ptr; }
-        double &operator[](size_t shift){
+        double *operator->() {
+            return _ptr;
+        }
+
+        double const *operator->() const {
+            return _ptr;
+        }
+
+        double& operator[](size_t shift)& {
             return *(_ptr + shift);
         }
-        double operator[](size_t shift) const{
+
+        double operator[](size_t shift) const &{
             return *(_ptr + shift);
         }
 
@@ -109,42 +122,42 @@ public:
 
     vector(const vector &v) : vector(v.begin(), v.end()) {};
 
-    double &at(size_t index){
+    double& at(size_t index)& {
         if (index < 0 || index >= size)
             throw std::range_error("Out of range");
 
         return arr[index];
     }
 
-    double const &at(size_t index) const{
+    double const &at(size_t index) const &{
         if (index < 0 || index >= size)
             throw std::range_error("Out of range");
 
         return arr[index];
     }
 
-    double &front(){
+    double &front()& {
         if (size == 0)
             throw std::range_error("Out of range");
 
         return arr[0];
     }
 
-    double const &front() const{
+    double const &front() const & {
         if (size == 0)
             throw std::range_error("Out of range");
 
         return arr[0];
     }
 
-    double &back(){
+    double &back()& {
         if (size == 0)
             throw std::range_error("Out of range");
 
         return arr[size - 1];
     }
 
-    double const &back() const{ //небезопасные методы сделать безопасными
+    double const &back() const & { //небезопасные методы сделать безопасными
         if (size == 0)
             throw std::range_error("Out of range");
 
@@ -261,7 +274,7 @@ public:
         return 0;
     } //ordering type должен вернуть ()
 
-    vector &operator=(vector const &v){
+    vector &operator=(vector const &v)& {
         if (this != &v)
         {
             vector tmp(v.begin(), v.end());
