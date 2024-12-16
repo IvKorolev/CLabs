@@ -258,22 +258,6 @@ public:
         return true;
     }
 
-//    int operator<=>(vector const &v) const{
-//        for (size_t i = 0; i < size && i < v.size; ++i)
-//        {
-//            if (arr[i] - v.arr[i] < -__DBL_EPSILON__)
-//                return -1;
-//            if (arr[i] - v.arr[i] > __DBL_EPSILON__)
-//                return 1;
-//        }
-//        if (size > v.size)
-//        {
-//            return 1;
-//        }
-//        if (size < v.size)
-//            return -1;
-//        return 0;
-//    } //ordering type должен вернуть ()
     std::strong_ordering operator<=>(vector const &v) const {
         for (size_t i = 0; i < size && i < v.size; ++i) {
             if (arr[i] < v.arr[i])
