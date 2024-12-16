@@ -258,18 +258,21 @@ public:
         return true;
     }
 
-    std::strong_ordering operator<=>(vector const &v) const {
+    std::partial_ordering operator<=>(vector const &v) const {
         for (size_t i = 0; i < size && i < v.size; ++i) {
+            if (std::isnan(arr[i]) || std::isnan(v.arr[i])) {
+                return std::partial_ordering::unordered;
+            }
             if (arr[i] < v.arr[i])
-                return std::strong_ordering::less;
+                return std::partial_ordering::less;
             if (arr[i] > v.arr[i])
-                return std::strong_ordering::greater;
+                return std::partial_ordering::greater;
         }
         if (size < v.size)
-            return std::strong_ordering::less;
+            return std::partial_ordering::less;
         if (size > v.size)
-            return std::strong_ordering::greater;
-        return std::strong_ordering::equal;
+            return std::partial_ordering::greater;
+        return std::partial_ordering::equivalent;
     }
 
     vector &operator=(vector const &v)& {
